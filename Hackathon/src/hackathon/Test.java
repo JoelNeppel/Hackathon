@@ -1,11 +1,12 @@
 package hackathon;
 
+import java.io.IOException;
+
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
-		System.in
-		String test = "test";
+		int test = System.in.read();
 		System.out.println(test);
 	}
 
