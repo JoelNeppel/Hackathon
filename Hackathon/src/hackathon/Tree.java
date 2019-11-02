@@ -1,21 +1,31 @@
+package hackathon;
+
 import java.awt.Graphics;
 import java.awt.Color;
 
 public class Tree
 {
-    int x; //x and y for size of screen
-    int y;
-    Graphics g;
+    public static int x; //x and y for size of screen
+    public static int y;
 
-    public Tree(int x, int y)
+    public static void setLoc(int x, int y)
     {
-        this.x = x;
-        this.y = y;
+        Tree.x = x;
+        Tree.y = y;
     }
 
-    public static void draw() {
-        //base of tree
+    public static void draw(Graphics g) {
+        //Trunk
         g.setColor(new Color(139,69,19));
-        g.fillRect(x/3, y, x/3, y);
+        g.fillRect((2 * x)/5, 0, x/5, y);
+
+        //Branches
+        g.setColor(new Color(139,69,19));
+        for (int i = 0; i < 5; ++i) {
+            g.fillRect(50, 100 + (175 * i), 450, 25);
+        }
+        for (int i = 0; i < 6; ++i) {
+            g.fillRect(500, 75 + (150 * i), 450, 25);
+        }
     }
 }

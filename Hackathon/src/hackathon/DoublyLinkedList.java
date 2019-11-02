@@ -1,4 +1,4 @@
-
+package hackathon;
 
 import java.util.Iterator;
 import java.util.ListIterator;
@@ -57,6 +57,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 	 */
 	private Node tail;
 
+	private int size;
+
 	/**
 	 * Adds the given data to the list at the end.
 	 * @param data
@@ -78,6 +80,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		{
 			link(tail, new Node(data));
 		}
+
+		size++;
 	}
 
 	/**
@@ -91,6 +95,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		if(found != null)
 		{
 			unlink(found);
+			size--;
 		}
 	}
 
@@ -142,6 +147,11 @@ public class DoublyLinkedList<E> implements Iterable<E>
 			n.previous.next = n.next;
 			n.next.previous = n.previous;
 		}
+	}
+
+	public int size()
+	{
+		return size;
 	}
 
 	/**

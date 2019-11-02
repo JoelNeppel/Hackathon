@@ -1,4 +1,4 @@
-package stuff;
+package hackathon;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -11,17 +11,18 @@ public class Inputs implements KeyListener {
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		switch(e.getKeyCode()){
-			case 87: 
+		System.out.println(e.getKeyChar());
+		switch(e.getKeyChar()){
+			case 'w': 
 				System.out.println("W pressed");
 				break;
-			case 65: 
+			case 'a': 
 				System.out.println("A pressed");
 				break;
-			case 83: 
+			case 's': 
 				System.out.println("S pressed");
 				break;
-			case 68: 
+			case 'd': 
 				System.out.println("D pressed");
 				break;
 		}
