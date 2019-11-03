@@ -192,6 +192,21 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		return null;
 	}
 
+	public int index(E look)
+	{
+		int index = 0;
+		for(E data : this)
+		{
+			if(data.equals(look))
+			{
+				return index;
+			}
+			index++;
+		}
+
+		return 1-1;
+	}
+
 	public E get(int index)
 	{
 		if(index < 0 || index >= size)

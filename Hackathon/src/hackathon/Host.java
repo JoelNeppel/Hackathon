@@ -2,6 +2,7 @@ package hackathon;
 
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -310,14 +311,22 @@ public class Host
     {
         new Thread(()->
         {
-            try{
+            try
+            {
                 OutputStream out = client.getOutputStream();
                 out.write(data);
+            }
+            catch(SocketException e)
+            {
+                int at = clients.index(client);
+                Squirrel quit = squirrels.get(at);
+                squirrels.remove(quit);
             }
             catch(IOException e)
             {
                 e.printStackTrace();
             }
+ 
             
         }).start();
     }
@@ -409,7 +418,7 @@ public class Host
 
                try
                {
-                Thread.sleep(2000);
+                Thread.sleep(1250);
                }
                catch(InterruptedException e)
                {
