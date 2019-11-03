@@ -129,9 +129,9 @@ public class Host
         int at = 0;
         byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
         System.out.println("Squirrels: "+ squirrels.size() + " Nuts: " + nuts.size());
-        ByteHelp.toBytes(16 * squirrels.size(), at, data);
+        ByteHelp.toBytes(squirrels.size(), at, data);
         at += 4;
-        ByteHelp.toBytes(8 * nuts.size(), at, data);
+        ByteHelp.toBytes(nuts.size(), at, data);
         at += 4;
 
         for(Squirrel s : squirrels)
