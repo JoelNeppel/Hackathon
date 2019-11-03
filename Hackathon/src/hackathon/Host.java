@@ -227,7 +227,7 @@ public class Host
             System.out.println("Beginning nut generation");
             while(true)
             {
-               if(nuts.size() < 100)
+               if(nuts.size() < 30)
                {
                 Random rand = new Random();
 
@@ -236,18 +236,15 @@ public class Host
     
                 nuts.add(new Nut(x, y));
                }
-               else
+
+               try
                {
-                   try
-                   {
-                    Thread.sleep(10);
+                Thread.sleep(2000);
+               }
+               catch(InterruptedException e)
+               {
 
-                   }
-                   catch(InterruptedException e)
-                   {
-
-                   }
-               } 
+               }
             }
         }).start();
     }

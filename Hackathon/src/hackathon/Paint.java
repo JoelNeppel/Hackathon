@@ -35,7 +35,7 @@ public class Paint extends JPanel {
 			}
 			
 		}
-
+		updateData(client);
 		squirrels = new DoublyLinkedList<>();
 		addKeyListener(new Inputs(client));
 
