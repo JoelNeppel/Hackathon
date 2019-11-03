@@ -237,26 +237,39 @@ public class DoublyLinkedList<E> implements Iterable<E>
 
 	public void rank(Comparator<E> comparator)
 	{
-		DoublyLinkedList<E> ranked = new DoublyLinkedList<>();
-		for(int i = 0; i < size; i++)
-		{
-			E biggest = head.data;
+		for(int j = 0; j < size; j++)
+		{	
 			DoublyLinkedIterator iter = new DoublyLinkedIterator();
+
+			for(int i = 0; i < j; i++)
+			{
+				iter.next();
+			}
+			Node swapWith = iter.next;	
+			Node biggest = iter.next;
+
 			while(iter.hasNext())
 			{
-				if(comparator.compare(biggest, iter.next()) < 0)
+				if(comparator.compare(biggest.data, iter.next.data) > 1)
 				{
-					biggest = iter.previous();
-					iter.next();
+					biggest = iter.next;
 				}
+				iter.next();
 			}
-			ranked.add(biggest);
-			remove(biggest);
-		}
 
-		this.head = ranked.head;
-		this.tail = ranked.tail;
-		this.size = ranked.size;
+			swap(swapWith, biggest);
+
+		}
+	}
+
+	private void swap(Node n1, Node n2)
+	{
+		Node swapped = n1.previous;
+		n1.previous = n2.previous;
+		n2.previous = swapped;
+		swapped = n1.next;
+		n1.next = n2.next;
+		n2.next = swapped;
 	}
 
 	@Override
