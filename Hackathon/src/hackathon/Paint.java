@@ -77,7 +77,7 @@ public class Paint extends JPanel {
 
 		Tree.draw(g);
 
-		//squirrels.rank(compare);
+		squirrels.rank(compare);
 
 		for (int i = 0; i < squirrels.size(); ++i) 
 		{
