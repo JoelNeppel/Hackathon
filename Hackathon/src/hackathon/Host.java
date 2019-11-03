@@ -145,35 +145,47 @@ public class Host
 
     private static byte[] getBytes()
     {
-        allowEntry = false;
-        System.out.println("making data to bytes to send");
-        int at = 0;
-        byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
-        System.out.println("Squirrels: "+ squirrels.size() + " Nuts: " + nuts.size());
-        ByteHelp.toBytes(squirrels.size(), at, data);
-        at += 4;
-        ByteHelp.toBytes(nuts.size(), at, data);
-        at += 4;
-
-        for(Squirrel s : squirrels)
+        while(true)
         {
-            byte[] sData = s.getBytes();
-            for(int i = 0; i < 16; i++)
+            try
             {
-                data[at] = sData[i];
-                at++;
+                allowEntry = false;
+                System.out.println("making data to bytes to send");
+                int at = 0;
+                byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
+                System.out.println("Squirrels: "+ squirrels.size() + " Nuts: " + nuts.size());
+                ByteHelp.toBytes(squirrels.size(), at, data);
+                at += 4;
+                ByteHelp.toBytes(nuts.size(), at, data);
+                at += 4;
+        
+                for(Squirrel s : squirrels)
+                {
+                    byte[] sData = s.getBytes();
+                    for(int i = 0; i < 16; i++)
+                    {
+                        data[at] = sData[i];
+                        at++;
+                    }
+                }
+        
+                for(Nut n : nuts)
+                {
+                    ByteHelp.toBytes(n.getX(), at, data);
+                    at += 4;
+                    ByteHelp.toBytes(n.getY(), at, data);
+                    at += 4;
+                }
+                allowEntry = true;
+
+                return data;
+            }
+            catch(NullPointerException e)
+            {
+
             }
         }
-
-        for(Nut n : nuts)
-        {
-            ByteHelp.toBytes(n.getX(), at, data);
-            at += 4;
-            ByteHelp.toBytes(n.getY(), at, data);
-            at += 4;
-        }
-        allowEntry = true;
-        return data;
+        
     }
 
     private static void update(Socket client, byte[] data)
