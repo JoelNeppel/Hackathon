@@ -73,7 +73,7 @@ public class Paint extends JPanel {
 		super.paint(g);
 
 		g.setColor(Color.GREEN);
-		g.drawRect(0, 800, 1000, 200);
+		g.fillRect(0, 800, 1000, 200);
 
 		Tree.draw(g);
 
