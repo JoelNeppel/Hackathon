@@ -11,6 +11,7 @@ import java.io.InputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.awt.image.BufferedImage;
+import java.awt.Font;
 
 @SuppressWarnings("serial")
 public class Paint extends JPanel {
@@ -105,6 +106,18 @@ public class Paint extends JPanel {
 				nuts[i].drawNut(g);
 			}
 		}
+		scoreBoard(g);
+	}
+
+	private void scoreBoard(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.drawRect(800, 0, 200, 300);
+		for (int i = 0; i < squirrels.size(); ++i)
+		{
+			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
+			g.drawString((i + 1) + ": " + squirrels.get(i).getID() + " -- " + squirrels.get(i).getNumNuts(), 810, 15 + (20 * i));
+		}
+
 	}
 
 	private void updateData(Socket client)

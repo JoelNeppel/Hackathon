@@ -316,6 +316,10 @@ public class Host
                 OutputStream out = client.getOutputStream();
                 out.write(data);
             }
+            catch(SocketException e)
+            {
+                clients.remove(client);
+            }
             catch(IOException e)
             {
                 e.printStackTrace();
@@ -328,10 +332,10 @@ public class Host
         new Thread(()->
         {
             Random rand = new Random();
-            int id = rand.nextInt(Integer.MAX_VALUE);
+            int id = rand.nextInt(100);
             while(squirrels.contains(new Squirrel(id, 0, 0)))
             {
-                id = rand.nextInt(Integer.MAX_VALUE);
+                id = rand.nextInt(100);
             }
             
             Squirrel squirrel = new Squirrel(id, rand.nextInt(1000), 850);
