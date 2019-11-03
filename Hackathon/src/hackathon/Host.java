@@ -51,7 +51,7 @@ public class Host
                     client.setTcpNoDelay(true);
                     clients.add(client);    
                     handleClient(client);
-                    done = true;
+                    done = true;    
                 }
                 else
                 {

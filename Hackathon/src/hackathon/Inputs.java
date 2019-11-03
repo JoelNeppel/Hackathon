@@ -38,15 +38,19 @@ public class Inputs implements KeyListener {
 		{
 			switch(e.getKeyChar()){
 				case 'w': 
+				case 'W':
 					out.write(ByteHelp.toBytes(Movement.UP.getNum()));
 					break;
 				case 'a': 
+				case 'A':
 					out.write(ByteHelp.toBytes(Movement.LEFT.getNum()));
 					break;
 				case 's': 
+				case 'S':
 					out.write(ByteHelp.toBytes(Movement.DOWN.getNum()));
 					break;
 				case 'd': 
+				case 'D':
 					out.write(ByteHelp.toBytes(Movement.RIGHT.getNum()));
 					break;
 			}

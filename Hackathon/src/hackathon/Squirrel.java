@@ -13,7 +13,7 @@ public class Squirrel
     public Squirrel(int id, int x, int y)
     {
         playerID = id;
-        loc = new Rectangle(x, y, 180, 190);
+        loc = new Rectangle(x, y, 100, 100);
         dir = Movement.STILL;
     }
 
