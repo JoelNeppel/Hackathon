@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Host",
+            "request": "launch",
+            "mainClass": "hackathon.Host",
+            "projectName": "Hackathon"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Paint",
+            "request": "launch",
+            "mainClass": "hackathon.Paint",
+            "projectName": "Hackathon"
+        }
+    ]
+}

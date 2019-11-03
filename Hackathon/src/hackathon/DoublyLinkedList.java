@@ -1,5 +1,6 @@
+package hackathon;
 
-
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -57,6 +58,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 	 */
 	private Node tail;
 
+	private int size;
+
 	/**
 	 * Adds the given data to the list at the end.
 	 * @param data
@@ -78,6 +81,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		{
 			link(tail, new Node(data));
 		}
+
+		size++;
 	}
 
 	/**
@@ -91,6 +96,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		if(found != null)
 		{
 			unlink(found);
+			size--;
 		}
 	}
 
@@ -144,6 +150,11 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 	}
 
+	public int size()
+	{
+		return size;
+	}
+
 	/**
 	 * Returns whether the list contains the given data.
 	 * @param data
@@ -160,6 +171,35 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 
 		return true;
+	}
+
+	public E get(E look)
+	{
+		for(E data : this)
+		{
+			if(data.equals(look))
+			{
+				return data;
+			}
+		}
+
+		return null;
+	}
+
+	public E get(int index)
+	{
+		if(index < 0 || index >= size)
+		{
+			throw new IndexOutOfBoundsException();
+		}
+
+		Iterator<E> iter = iterator();
+		for(int i = 0; i < index; i++)
+		{
+			iter.next();
+		}
+
+		return iter.next();
 	}
 
 	/**
@@ -187,6 +227,28 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 
 		return null;
+	}
+
+	public void rank(Comparator<E> comparator)
+	{
+		DoublyLinkedList<E> ranked = new DoublyLinkedList<>();
+		for(int i = 0; i < size; i++)
+		{
+			Node biggest = head;
+			DoublyLinkedIterator iter = new DoublyLinkedIterator();
+			while(iter.hasNext())
+			{
+				if(comparator.compare(biggest.data, iter.next()) < 0)
+				{
+					biggest = iter.pending;
+				}
+			}
+			ranked.add(biggest.data);
+			unlink(biggest);
+		}
+
+		this.head = ranked.head;
+		this.tail = ranked.tail;
 	}
 
 	@Override
