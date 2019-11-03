@@ -133,6 +133,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 	{
 		if(n.previous == null && n.next == null)
 		{
+			// n is only element case
 			head = null;
 			tail = null;
 		}
@@ -237,7 +238,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 	public void rank(Comparator<E> comparator)
 	{
 		DoublyLinkedList<E> ranked = new DoublyLinkedList<>();
-		for(int i = 0; i < size; i++)
+		for(int i = 0; i < size - 1; i++)
 		{
 			Node biggest = head;
 			DoublyLinkedIterator iter = new DoublyLinkedIterator();

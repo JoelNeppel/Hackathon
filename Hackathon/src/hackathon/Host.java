@@ -7,10 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 
-import javax.lang.model.util.ElementScanner6;
-
 import hackathon.Movement;
-import java.util.Arrays;
 
 public class Host
 {
@@ -99,7 +96,6 @@ public class Host
                 // Do player movements/updates
                 for(Squirrel s : squirrels)// For each squirrel in list
                 {
-                    System.out.println(s);
                     switch(s.getDirection())
                     {
                         case UP:
@@ -274,10 +270,8 @@ public class Host
             try
             {
                 allowEntry = false;
-                System.out.println("making data to bytes to send");
                 int at = 0;
                 byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
-                System.out.println("Squirrels: "+ squirrels.size() + " Nuts: " + nuts.size());
                 ByteHelp.toBytes(squirrels.size(), at, data);
                 at += 4;
                 ByteHelp.toBytes(nuts.size(), at, data);
@@ -306,7 +300,7 @@ public class Host
             }
             catch(NullPointerException | IndexOutOfBoundsException e)
             {
-
+                
             }
         }
         
@@ -316,8 +310,6 @@ public class Host
     {
         new Thread(()->
         {
-           System.out.println("Updating to: " + client + " with " + Arrays.toString(data));
-            System.out.println("Num squirrels: " + ByteHelp.bytesToInt(data));
             try{
                 OutputStream out = client.getOutputStream();
                 out.write(data);
@@ -334,7 +326,6 @@ public class Host
     { 
         new Thread(()->
         {
-            System.out.println("Connected to new client");
             Random rand = new Random();
             int id = rand.nextInt(Integer.MAX_VALUE);
             while(squirrels.contains(new Squirrel(id, 0, 0)))
@@ -404,7 +395,6 @@ public class Host
     {
         new Thread(()->
         {
-            System.out.println("Beginning nut generation");
             while(true)
             {
                if(nuts.size() < 30 && allowEntry)
@@ -415,7 +405,6 @@ public class Host
                 int y = rand.nextInt(1000);
     
                 nuts.add(new Nut(x, y));
-                System.out.println("added nut: " + nuts.size());
                }
 
                try

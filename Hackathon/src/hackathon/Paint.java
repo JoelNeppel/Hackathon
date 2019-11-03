@@ -79,10 +79,8 @@ public class Paint extends JPanel {
 
 		squirrels.rank(compare);
 
-		System.out.println(squirrels.size());
 		for (int i = 0; i < squirrels.size(); ++i) 
 		{
-			System.out.println(squirrels.get(i));
 			if (0 == i)
 			{
 				g.drawImage(FirstPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
@@ -133,7 +131,6 @@ public class Paint extends JPanel {
 					int numSquirrels = ByteHelp.bytesToInt(bytes);
 					in.read(bytes);
 					int numNuts = ByteHelp.bytesToInt(bytes);
-					System.out.println("Squirrels: " + numSquirrels + " Nuts: " + numNuts);
 					for(int i = 0; i < numSquirrels; i++)
 					{
 						in.read(bytes);

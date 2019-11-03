@@ -1,7 +1,6 @@
 package hackathon;
 
 import java.awt.Rectangle;
-import java.awt.Point;
 
 public class Squirrel
 {

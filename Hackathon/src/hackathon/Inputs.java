@@ -33,7 +33,6 @@ public class Inputs implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		System.out.println(e.getKeyChar());
 		try
 		{
 			switch(e.getKeyChar()){
