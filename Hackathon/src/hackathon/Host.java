@@ -163,7 +163,7 @@ public class Host
     {
         for (Squirrel n : squirrels)
         {
-            if (s.touched(n.getID(), n.getY()))
+            if (s.touched(n.getRect())) 
             {
                 int moveDist;
                 if (s.getNumNuts() > n.getNumNuts())

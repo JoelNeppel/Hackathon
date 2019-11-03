@@ -27,6 +27,11 @@ public class Squirrel
         loc.setLocation(loc.x + x, loc.y + y);
     }
 
+    public Rectangle getRect()
+    {
+        return loc;
+    }
+
     public int getX()
     {
         return (int) loc.getX();
@@ -70,6 +75,11 @@ public class Squirrel
     public boolean touched(int x, int y)
     {
         return loc.contains(x, y);
+    }
+
+    public boolean touched(Rectangle r)
+    {
+        return loc.intersects(r);
     }
 
     public int getID()
