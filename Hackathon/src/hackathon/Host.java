@@ -316,18 +316,10 @@ public class Host
                 OutputStream out = client.getOutputStream();
                 out.write(data);
             }
-            catch(SocketException e)
-            {
-                int at = clients.index(client);
-                Squirrel quit = squirrels.get(at);
-                squirrels.remove(quit);
-            }
             catch(IOException e)
             {
                 e.printStackTrace();
             }
- 
-            
         }).start();
     }
 
@@ -346,14 +338,6 @@ public class Host
             rand = null;
             squirrels.add(squirrel);
             byte[] bytes = ByteHelp.toBytes(id);
-            /*try 
-            {
-                client.getOutputStream().write(bytes);
-            }
-            catch(IOException e)
-            {
-
-            }*/
             InputStream in = null;
             while(null == in)
             {

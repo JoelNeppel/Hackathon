@@ -55,7 +55,7 @@ public class Paint extends JPanel {
 		}
 	}
 	
-	public static void main(String[] args) { //main
+	public static void main(String[] args) { //
 		JFrame frame = new JFrame();
 		Paint panel = new Paint();
 
@@ -133,7 +133,6 @@ public class Paint extends JPanel {
 					int numSquirrels = ByteHelp.bytesToInt(bytes);
 					in.read(bytes);
 					int numNuts = ByteHelp.bytesToInt(bytes);
-					squirrels.clear();
 					for(int i = 0; i < numSquirrels; i++)
 					{
 						in.read(bytes);
@@ -145,8 +144,18 @@ public class Paint extends JPanel {
 						in.read(bytes);
 						int squirrelNuts = ByteHelp.bytesToInt(bytes);
 
-						Squirrel s = new Squirrel(id, x, y);
-						squirrels.add(s);
+						int result = squirrels.lastIndexOf(new Squirrel(id, 0, 0));
+						Squirrel s;
+						if (result == -1) 
+						{
+							s = new Squirrel(id, x, y);
+							squirrels.add(s);
+						}
+						else
+						{
+							s = squirrels.get(result);
+							s.setLocation(x, y);
+						}
 						s.setNuts(squirrelNuts);
 
 					}
