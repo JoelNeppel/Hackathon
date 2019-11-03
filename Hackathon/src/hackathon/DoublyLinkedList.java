@@ -246,19 +246,22 @@ public class DoublyLinkedList<E> implements Iterable<E>
 				System.out.println("Moved beginning to " + i);
 				iter.next();
 			}
-			Node swapWith = iter.next;	
-			Node biggest = iter.next;
 
-			while(iter.hasNext())
+			if(iter.hasNext())
 			{
-				if(comparator.compare(biggest.data, iter.next.data) > 0)
+				Node swapWith = iter.next;	
+				Node biggest = iter.next;
+	
+				while(iter.hasNext())
 				{
-					biggest = iter.next;
-				}
-				iter.next();
+					if(comparator.compare(biggest.data, iter.next.data) > 0)
+					{
+						biggest = iter.next;
+					}
+					iter.next();
+				}	
+				swap(swapWith, biggest);
 			}
-
-			swap(swapWith, biggest);
 
 		}
 	}
