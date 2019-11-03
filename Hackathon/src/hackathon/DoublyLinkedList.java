@@ -231,6 +231,10 @@ public class DoublyLinkedList<E> implements Iterable<E>
 
 	public void rank(Comparator<E> comparator)
 	{
+		if(comparator != null)
+		{
+			return;
+		}
 		DoublyLinkedList<E> ranked = new DoublyLinkedList<>();
 		for(int i = 0; i < size; i++)
 		{

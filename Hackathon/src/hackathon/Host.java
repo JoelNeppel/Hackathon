@@ -214,6 +214,7 @@ public class Host
                     if(in.available() >= 4)
                     {
                         bytes = new byte[4];
+                        in.read(bytes);
                         squirrel.setMovement(Movement.intToMov(ByteHelp.bytesToInt(bytes)));
                     }
                     else
