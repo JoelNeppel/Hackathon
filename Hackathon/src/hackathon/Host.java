@@ -257,7 +257,7 @@ public class Host
         {
             s.setLocation(s.getX(), 0);
         }
-        else if(s.getY() > 900)
+        else if(s.getY() > 950)
         {
             s.setLocation(s.getX(), 950);
         }
