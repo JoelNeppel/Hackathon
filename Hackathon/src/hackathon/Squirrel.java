@@ -67,9 +67,9 @@ public class Squirrel
         this.dir = dir;
     }
 
-    public boolean touched(Point p )
+    public boolean touched(int x, int y)
     {
-        return loc.contains(p);
+        return loc.contains(x, y);
     }
 
     public int getID()

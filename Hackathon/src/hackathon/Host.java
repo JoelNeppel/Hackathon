@@ -113,7 +113,7 @@ public class Host
                         default:
                             break;
                     }
-                    
+                    checkNuts(s);
                     
                 }
 
@@ -141,6 +141,18 @@ public class Host
                 }
             }
         }).start();
+    }
+
+    private static void checkNuts(Squirrel s) 
+    {
+        for (Nut n : nuts)
+        {
+            if (s.touched(n.getX(), n.getY()))
+            {
+                s.addNut();
+                nuts.remove(n);
+            }
+        }
     }
 
     private static byte[] getBytes()
