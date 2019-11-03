@@ -9,12 +9,13 @@ import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 
 @SuppressWarnings("serial")
 public class Paint extends JPanel {
 		
-	private static DoublyLinkedList<Squirrel> squirrels;
+	private static ArrayList<Squirrel> squirrels;
 	private static Nut[] nuts = new Nut[100];
 	private static BufferedImage FirstPlace = null;
 	private static BufferedImage SecondPlace = null;
@@ -38,7 +39,7 @@ public class Paint extends JPanel {
 			
 		}
 		updateData(client);
-		squirrels = new DoublyLinkedList<>();
+		squirrels = new ArrayList<>();
 		addKeyListener(new Inputs(client));
 
 		try
@@ -77,7 +78,7 @@ public class Paint extends JPanel {
 
 		Tree.draw(g);
 
-		squirrels.rank(compare);
+		squirrels.sort(compare);
 
 		for (int i = 0; i < squirrels.size(); ++i) 
 		{
@@ -143,14 +144,16 @@ public class Paint extends JPanel {
 						in.read(bytes);
 						int squirrelNuts = ByteHelp.bytesToInt(bytes);
 
-						Squirrel s = squirrels.get(new Squirrel(id,0,0));
-						if (null == s) 
+						int result = squirrels.lastIndexOf(new Squirrel(id, 0, 0));
+						Squirrel s;
+						if (result == -1) 
 						{
 							s = new Squirrel(id, x, y);
 							squirrels.add(s);
 						}
 						else
 						{
+							s = squirrels.get(result);
 							s.setLocation(x, y);
 						}
 						s.setNuts(squirrelNuts);
