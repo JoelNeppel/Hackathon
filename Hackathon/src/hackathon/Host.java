@@ -18,7 +18,7 @@ public class Host
         squirrels = new DoublyLinkedList<>();
         nuts = new DoublyLinkedList<>();
         clients = new DoublyLinkedList<>();
-
+        nutGeneration();
         ServerSocket server = null;
         while(null == server)
         {
@@ -155,6 +155,22 @@ public class Host
     { 
         new Thread(()->
         {
+            Random rand = new Random();
+            int id = rand.nextInt(Integer.MAX_VALUE);
+            while(squirrels.contains(new Squirrel(id, 0, 0)))
+            {
+                id = rand.nextInt(Integer.MAX_VALUE);
+            }
+
+            byte[] bytes = ByteHelp.toBytes(id);
+            try 
+            {
+                client.getOutputStream().write(bytes);
+            }
+            catch(IOException e)
+            {
+
+            }
             InputStream in = null;
             while(null == in)
             {
@@ -174,7 +190,8 @@ public class Host
                 {
                     if(in.available() >= 4)
                     {
-
+                        bytes = new byte[4];
+                        
                     }
                     else
                     {
@@ -199,21 +216,33 @@ public class Host
         }).start();
     }
 
-    private void nutGeneration()
+    private static void nutGeneration()
     {
         new Thread(()->
         {
-            Random rand = new Random();
+            while(true)
+            {
+               if(nuts.size() < 100)
+               {
+                Random rand = new Random();
 
-            while(nuts.size() < 100){
-                for (int i = 0; i < 1000; i++) {
-                    for (int j = 0; j < 1000; j++) {
-                        if (rand.nextInt() % 200 < 10) {
-                            Nut n = new Nut(i, j);
-                            nuts.add(n);
-                        }
-                    }
-                }
+                int x = rand.nextInt(1000);
+                int y = rand.nextInt(1000);
+    
+                nuts.add(new Nut(x, y));
+               }
+               else
+               {
+                   try
+                   {
+                    Thread.sleep(10);
+
+                   }
+                   catch(InterruptedException e)
+                   {
+
+                   }
+               } 
             }
         }).start();
     }

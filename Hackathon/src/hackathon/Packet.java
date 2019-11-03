@@ -6,6 +6,8 @@ public class Packet
     private Movement mov;
     private Squirrel s;
 
+    public Packet(){}
+
     public Packet(Squirrel squirrel)
     {
         s = squirrel;
@@ -21,6 +23,11 @@ public class Packet
 
     }
 
+    public void setMov(Movement m)
+    {
+        mov = m;
+    }
+
     public byte[] toBytes()
     {
         if(null != s)
@@ -28,6 +35,8 @@ public class Packet
             byte[] data = new byte[16];
             
         }
+
+        
         return null;
     }
     

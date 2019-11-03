@@ -12,18 +12,19 @@ public class Squirrel
 
     public Squirrel(int id, int x, int y)
     {
-        
+        playerID = id;
+        loc = new Rectangle(x, y, 180, 190);
+        dir = Movement.STILL;
     }
 
     public void setLocation(int x, int y)
     {
-        
+        loc.setLocation(x, y);
     }
 
     public void move(int x, int y)
     {
-        loc.x += x;
-        loc.y += y;
+        loc.setLocation(loc.x + x, loc.y + y);
     }
 
     public int getX()
@@ -46,6 +47,11 @@ public class Squirrel
         numNuts++;
     }
 
+    public int getNumNuts()
+    {
+        return numNuts;
+    }
+
     public boolean touched(Point p )
     {
         return loc.contains(p);
@@ -65,5 +71,17 @@ public class Squirrel
         ByteHelp.toBytes(numNuts, 12, data);
 
         return data;
+    }
+
+    @Override
+    public boolean equals(Object o)
+    {
+        if(o.getClass() != Squirrel.class)
+        {
+            return false;
+        }
+
+        Squirrel s = (Squirrel) o;
+        return s.playerID == this.playerID;
     }
 }

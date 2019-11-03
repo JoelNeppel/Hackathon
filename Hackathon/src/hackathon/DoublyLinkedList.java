@@ -1,5 +1,6 @@
 package hackathon;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -172,6 +173,35 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		return true;
 	}
 
+	public E get(E look)
+	{
+		for(E data : this)
+		{
+			if(data.equals(look))
+			{
+				return data;
+			}
+		}
+
+		return null;
+	}
+
+	public E get(int index)
+	{
+		if(index < 0 || index >= size)
+		{
+			throw new IndexOutOfBoundsException();
+		}
+
+		Iterator<E> iter = iterator();
+		for(int i = 0; i < index; i++)
+		{
+			iter.next();
+		}
+
+		return iter.next();
+	}
+
 	/**
 	 * Returns the first node that matches the given data or null if the given data
 	 * is not in the list
@@ -197,6 +227,28 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 
 		return null;
+	}
+
+	public void rank(Comparator<E> comparator)
+	{
+		DoublyLinkedList<E> ranked = new DoublyLinkedList<>();
+		for(int i = 0; i < size; i++)
+		{
+			Node biggest = head;
+			DoublyLinkedIterator iter = new DoublyLinkedIterator();
+			while(iter.hasNext())
+			{
+				if(comparator.compare(biggest.data, iter.next()) < 0)
+				{
+					biggest = iter.pending;
+				}
+			}
+			ranked.add(biggest.data);
+			unlink(biggest);
+		}
+
+		this.head = ranked.head;
+		this.tail = ranked.tail;
 	}
 
 	@Override
