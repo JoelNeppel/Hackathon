@@ -75,6 +75,7 @@ public class Host
                 // Do player movements/updates
                 for(Squirrel s : squirrels)// For each squirrel in list
                 {
+                    System.out.println(s);
                     switch(s.getDirection())
                     {
                         case UP:

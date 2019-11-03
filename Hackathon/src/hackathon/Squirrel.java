@@ -99,4 +99,10 @@ public class Squirrel
         Squirrel s = (Squirrel) o;
         return s.playerID == this.playerID;
     }
+
+    @Override
+    public String toString()
+    {
+        return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ")";
+    }
 }

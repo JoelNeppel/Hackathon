@@ -75,6 +75,7 @@ public class Paint extends JPanel {
 
 		for (int i = 0; i < squirrels.size(); ++i) 
 		{
+			System.out.println(squirrels.get(i));
 			if (0 == i)
 			{
 				g.drawImage(FirstPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
