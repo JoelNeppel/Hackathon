@@ -254,12 +254,11 @@ public class DoublyLinkedList<E> implements Iterable<E>
 				do
 				{
 					iter.next();
-					if(comparator.compare(biggest.data, iter.next.data) > 0)
+					if(comparator.compare(biggest.data, iter.pending.data) > 0)
 					{
-						biggest = iter.next;
+						biggest = iter.pending;
 					}
-				}	
-				while(iter.hasNext());
+				}while(iter.hasNext());
 				swap(swapWith, biggest);
 			}
 
