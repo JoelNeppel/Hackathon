@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
+
+import javax.lang.model.util.ElementScanner6;
+
 import hackathon.Movement;
 import java.util.Arrays;
 
@@ -114,7 +117,8 @@ public class Host
                             break;
                     }
                     checkNuts(s);
-                    
+                    checkTouching(s);
+                    checkBoundry(s);
                 }
 
                 //Send updates to players
@@ -152,6 +156,114 @@ public class Host
                 s.addNut();
                 nuts.remove(n);
             }
+        }
+    }
+
+    private static void checkTouching(Squirrel s)
+    {
+        for (Squirrel n : squirrels)
+        {
+            if (s.touched(n.getID(), n.getY()))
+            {
+                int moveDist;
+                if (s.getNumNuts() > n.getNumNuts())
+                {
+                    moveDist = 10 + s.getNumNuts();
+                    if (moveDist > 50) 
+                    {
+                        moveDist = 50;
+                    }
+                    switch (s.getDirection()){
+                        case UP:
+                            n.move(0, -moveDist);
+                            break;
+                        case DOWN:
+                            n.move(0, moveDist);
+                            break;
+                        case LEFT:
+                            n.move(-moveDist, 0);
+                            break;
+                        case RIGHT:
+                            n.move(moveDist, 0);
+                            break;
+                        case STILL:
+                            break;
+                    }
+                }
+                else if (s.getNumNuts() < n.getNumNuts())
+                {
+                    moveDist = 10 + n.getNumNuts();
+                    if (moveDist > 50) 
+                    {
+                        moveDist = 50;
+                    }
+                    switch (n.getDirection()){
+                        case UP:
+                            s.move(0, -moveDist);
+                            break;
+                        case DOWN:
+                            s.move(0, moveDist);
+                            break;
+                        case LEFT:
+                            s.move(-moveDist, 0);
+                            break;
+                        case RIGHT:
+                            s.move(moveDist, 0);
+                            break;
+                        case STILL:
+                            break;
+                    }
+                }
+                else 
+                {
+                    moveDist = 10 + s.getNumNuts();
+                    if (moveDist > 50)
+                    {
+                        moveDist = 50;
+                    }
+                    switch (s.getDirection()){
+                        case UP:
+                            n.move(0, -moveDist);
+                            s.move(0, moveDist);
+                            break;
+                        case DOWN:
+                            n.move(0, moveDist);
+                            s.move(0, -moveDist);
+                            break;
+                        case LEFT:
+                            n.move(-moveDist, 0);
+                            s.move(moveDist, 0);
+                            break;
+                        case RIGHT:
+                            n.move(moveDist, 0);
+                            s.move(-moveDist, 0);
+                            break;
+                        case STILL:
+                            break;
+                    }
+                }
+            }
+        }    
+    }
+
+    private static void checkBoundry(Squirrel s)
+    {
+        if(s.getX() < 0)
+        {
+            s.setLocation(0, s.getY());
+        }
+        else if(s.getX() > 990)
+        {
+            s.setLocation(990, s.getY());
+        }
+
+        if(s.getY() < 0)
+        {
+            s.setLocation(s.getX(), 0);
+        }
+        else if(s.getY() > 990)
+        {
+            s.setLocation(s.getX(), 990);
         }
     }
 
@@ -230,7 +342,8 @@ public class Host
                 id = rand.nextInt(Integer.MAX_VALUE);
             }
             
-            Squirrel squirrel = new Squirrel(id, 500, 900);
+            Squirrel squirrel = new Squirrel(id, rand.nextInt(1000), 850);
+            rand = null;
             squirrels.add(squirrel);
             byte[] bytes = ByteHelp.toBytes(id);
             /*try 
