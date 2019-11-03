@@ -243,6 +243,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 
 			for(int i = 0; i < j; i++)
 			{
+				System.out.println("Moved beginning to " + i);
 				iter.next();
 			}
 			Node swapWith = iter.next;	
