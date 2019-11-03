@@ -112,6 +112,6 @@ public class Squirrel
     @Override
     public String toString()
     {
-        return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ")";
+        return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ") with: " + numNuts + " nuts.";
     }
 }
