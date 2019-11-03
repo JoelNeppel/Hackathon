@@ -252,18 +252,18 @@ public class Host
         {
             s.setLocation(0, s.getY());
         }
-        else if(s.getX() > 990)
+        else if(s.getX() > 900)
         {
-            s.setLocation(990, s.getY());
+            s.setLocation(900, s.getY());
         }
 
         if(s.getY() < 0)
         {
             s.setLocation(s.getX(), 0);
         }
-        else if(s.getY() > 990)
+        else if(s.getY() > 900)
         {
-            s.setLocation(s.getX(), 990);
+            s.setLocation(s.getX(), 950);
         }
     }
 

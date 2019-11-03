@@ -3,6 +3,8 @@ package hackathon;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import java.awt.Color;
 import java.awt.Graphics;
 import java.io.IOException;
 import java.io.InputStream;
@@ -63,11 +65,15 @@ public class Paint extends JPanel {
 		frame.setContentPane(panel);
 
 		panel.requestFocus();
+		panel.setBackground(Color.CYAN);
 		Tree.setLoc(frame.getWidth(), frame.getHeight());
 	}
 	
 	public void paint(Graphics g) {
 		super.paint(g);
+
+		g.setColor(Color.GREEN);
+		g.drawRect(0, 800, 1000, 200);
 
 		Tree.draw(g);
 
