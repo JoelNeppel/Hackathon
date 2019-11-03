@@ -47,9 +47,24 @@ public class Squirrel
         numNuts++;
     }
 
+    public void setNuts(int nuts)
+    {
+        numNuts = nuts;
+    }
+
     public int getNumNuts()
     {
         return numNuts;
+    }
+
+    public Movement getMovement()
+    {
+        return dir;
+    }
+
+    public void setMovement(Movement dir)
+    {
+        this.dir = dir;
     }
 
     public boolean touched(Point p )

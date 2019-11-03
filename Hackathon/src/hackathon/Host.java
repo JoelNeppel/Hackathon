@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
+import hackathon.Movement;
 
 public class Host
 {
@@ -74,7 +75,22 @@ public class Host
                 // Do player movements/updates
                 for(Squirrel s : squirrels)// For each squirrel in list
                 {
-                    
+                    switch(s.getDirection())
+                    {
+                        case UP:
+                            s.move(0, -1);
+                            break;
+                        case DOWN:
+                            s.move(0, 1);
+                            break;
+                        case LEFT:
+                            s.move(-1, 0);
+                            break;
+                        case RIGHT:
+                            s.move(1, 0);
+                        default:
+                            break;
+                    }
                     
                     
                 }
@@ -148,7 +164,7 @@ public class Host
             }
             catch(IOException e)
             {
-
+                e.printStackTrace();
             }
             
         }).start();
@@ -166,6 +182,8 @@ public class Host
                 id = rand.nextInt(Integer.MAX_VALUE);
             }
             
+            Squirrel squirrel = new Squirrel(id, 500, 900);
+            squirrels.add(squirrel);
             byte[] bytes = ByteHelp.toBytes(id);
             /*try 
             {
@@ -195,7 +213,7 @@ public class Host
                     if(in.available() >= 4)
                     {
                         bytes = new byte[4];
-                        
+                        squirrel.setMovement(Movement.intToMov(ByteHelp.bytesToInt(bytes)));
                     }
                     else
                     {
@@ -215,7 +233,7 @@ public class Host
                 }
   
             }
-
+            squirrels.remove(squirrel);
             clients.remove(client);
         }).start();
     }
@@ -235,6 +253,7 @@ public class Host
                 int y = rand.nextInt(1000);
     
                 nuts.add(new Nut(x, y));
+                System.out.println("added nut: " + nuts.size());
                }
 
                try

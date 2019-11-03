@@ -24,24 +24,7 @@ public class Inputs implements KeyListener {
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {
-		System.out.println(e.getKeyChar());
-		Packet p = new Packet();
-		switch(e.getKeyChar()){
-			case 'w': 
-				
-				break;
-			case 'a': 
-				System.out.println("A pressed");
-				break;
-			case 's': 
-				System.out.println("S pressed");
-				break;
-			case 'd': 
-				System.out.println("D pressed");
-				break;
-		}
-	}
+	public void keyTyped(KeyEvent e) {}
 
 /*87 - W
 65 - A
@@ -52,12 +35,43 @@ public class Inputs implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		System.out.println(e.getKeyChar());
+		Packet p = new Packet();
+		try
+		{
+			switch(e.getKeyChar()){
+				case 'w': 
+					out.write(ByteHelp.toBytes(Movement.UP.getNum()));
+					break;
+				case 'a': 
+					out.write(ByteHelp.toBytes(Movement.LEFT.getNum()));
+					break;
+				case 's': 
+					out.write(ByteHelp.toBytes(Movement.DOWN.getNum()));
+					break;
+				case 'd': 
+					out.write(ByteHelp.toBytes(Movement.RIGHT.getNum()));
+					break;
+			}
+		}
+		catch(IOException r)
+		{
+
+		}
 		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent e) {
+	public void keyReleased(KeyEvent e)
+	{
+		try 
+		{
+			out.write(ByteHelp.toBytes(Movement.STILL.getNum()));
+		}
+		catch(IOException r)
+		{
 
+		}
 	}
 
 }

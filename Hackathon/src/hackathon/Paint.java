@@ -129,7 +129,25 @@ public class Paint extends JPanel {
 					for(int i = 0; i < numSquirrels; i++)
 					{
 						in.read(bytes);
-						//int id = 
+						int id = ByteHelp.bytesToInt(bytes);
+						in.read(bytes);
+						int x = ByteHelp.bytesToInt(bytes);
+						in.read(bytes);
+						int y = ByteHelp.bytesToInt(bytes);
+						in.read(bytes);
+						int squirrelNuts = ByteHelp.bytesToInt(bytes);
+
+						Squirrel s = squirrels.get(new Squirrel(id,0,0));
+						if (null == s) 
+						{
+							s = new Squirrel(id, x, y);
+						}
+						else
+						{
+							s.setLocation(x, y);
+						}
+						s.setNuts(squirrelNuts);
+
 					}
 
 					for(int i = 0; i < nuts.length; i++)
@@ -152,7 +170,7 @@ public class Paint extends JPanel {
 				}
 				catch(IOException e)
 				{
-
+					e.printStackTrace();
 				}
 				repaint();
 			}

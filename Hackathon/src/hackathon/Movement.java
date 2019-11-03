@@ -17,7 +17,7 @@ public enum Movement
         return num;
     }
 
-    public Movement intToMov(int i)
+    public static Movement intToMov(int i)
     {
         for(Movement m : Movement.values())
         {
