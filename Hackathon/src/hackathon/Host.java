@@ -14,6 +14,7 @@ public class Host
     private static DoublyLinkedList<Squirrel> squirrels;
     private static DoublyLinkedList<Socket> clients;
     private static DoublyLinkedList<Nut> nuts; //haha nuts
+    private static boolean allowEntry;
     
     public static void main(String[] args)
     {
@@ -42,9 +43,28 @@ public class Host
             try
             {
                 Socket client = server.accept();
-                client.setTcpNoDelay(true);
-                clients.add(client);    
-                handleClient(client);
+               boolean done = false;
+               while(!done)
+               {
+                if(allowEntry)
+                {
+                    client.setTcpNoDelay(true);
+                    clients.add(client);    
+                    handleClient(client);
+                    done = true;
+                }
+                else
+                {
+                    try
+                    {
+                        Thread.sleep(1);
+                    }
+                    catch(InterruptedException e)
+                    {
+
+                    }
+                }
+               }
             }
             catch(IOException e)
             {
@@ -80,16 +100,16 @@ public class Host
                     switch(s.getDirection())
                     {
                         case UP:
-                            s.move(0, -1);
+                            s.move(0, -2);
                             break;
                         case DOWN:
-                            s.move(0, 1);
+                            s.move(0, 2);
                             break;
                         case LEFT:
-                            s.move(-1, 0);
+                            s.move(-2, 0);
                             break;
                         case RIGHT:
-                            s.move(1, 0);
+                            s.move(2, 0);
                         default:
                             break;
                     }
@@ -125,6 +145,7 @@ public class Host
 
     private static byte[] getBytes()
     {
+        allowEntry = false;
         System.out.println("making data to bytes to send");
         int at = 0;
         byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
@@ -151,7 +172,7 @@ public class Host
             ByteHelp.toBytes(n.getY(), at, data);
             at += 4;
         }
-
+        allowEntry = true;
         return data;
     }
 
@@ -249,7 +270,7 @@ public class Host
             System.out.println("Beginning nut generation");
             while(true)
             {
-               if(nuts.size() < 30)
+               if(nuts.size() < 30 && allowEntry)
                {
                 Random rand = new Random();
 
