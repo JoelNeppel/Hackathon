@@ -142,6 +142,7 @@ public class Paint extends JPanel {
 						if (null == s) 
 						{
 							s = new Squirrel(id, x, y);
+							squirrels.add(s);
 						}
 						else
 						{
