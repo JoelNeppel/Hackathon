@@ -159,8 +159,8 @@ public class Host
     {
         new Thread(()->
         {
-            System.out.println("Updating to: " + client + " with " + Arrays.toString(data));
-
+           System.out.println("Updating to: " + client + " with " + Arrays.toString(data));
+            System.out.println("Num squirrels: " + ByteHelp.bytesToInt(data));
             try{
                 OutputStream out = client.getOutputStream();
                 out.write(data);
