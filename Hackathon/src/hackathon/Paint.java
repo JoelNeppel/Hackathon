@@ -83,7 +83,6 @@ public class Paint extends JPanel {
 
 		for (int i = 0; i < squirrels.size(); ++i) 
 		{
-			System.out.println("Index: " + i + "     " + squirrels.get(i));
 			if (0 == i)
 			{
 				g.drawImage(FirstPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
@@ -110,12 +109,17 @@ public class Paint extends JPanel {
 	}
 
 	private void scoreBoard(Graphics g) {
-		g.setColor(Color.BLACK);
-		g.drawRect(800, 0, 200, 300);
+		g.setColor(new Color(0,0,0,127));
+		g.fillRect(800, 0, 200, 220);
+		g.setColor(Color.WHITE);
 		for (int i = 0; i < squirrels.size(); ++i)
 		{
+			if (i > 9) {
+				return;
+			}
 			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-			g.drawString((i + 1) + ": " + squirrels.get(i).getID() + " -- " + squirrels.get(i).getNumNuts(), 810, 15 + (20 * i));
+			g.drawString((i + 1) + ": " + squirrels.get(i).getID() + " - " + squirrels.get(i).getNumNuts(), 810, 25 + (20 * i));
+
 		}
 
 	}

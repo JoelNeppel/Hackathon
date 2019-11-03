@@ -83,7 +83,7 @@ public class Squirrel
 
     public int getID()
     {
-        return 0;
+        return playerID;
     }
 
     public byte[] getBytes()
