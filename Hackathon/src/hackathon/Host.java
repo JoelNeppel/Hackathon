@@ -304,7 +304,7 @@ public class Host
 
                 return data;
             }
-            catch(NullPointerException e)
+            catch(NullPointerException | IndexOutOfBoundsException e)
             {
 
             }
