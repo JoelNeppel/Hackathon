@@ -251,7 +251,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 			{
 				Node swapWith = iter.next;	
 				Node biggest = iter.next;
-	
+				iter.next();
 				while(iter.hasNext())
 				{
 					if(comparator.compare(biggest.data, iter.next.data) > 0)
