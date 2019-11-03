@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 import hackathon.Movement;
+import java.util.Arrays;
 
 public class Host
 {
@@ -127,7 +128,7 @@ public class Host
         System.out.println("making data to bytes to send");
         int at = 0;
         byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
-        
+        System.out.println("Squirrels: "+ squirrels.size() + " Nuts: " + nuts.size());
         ByteHelp.toBytes(16 * squirrels.size(), at, data);
         at += 4;
         ByteHelp.toBytes(8 * nuts.size(), at, data);
@@ -158,7 +159,8 @@ public class Host
     {
         new Thread(()->
         {
-            System.out.println("Updating to: " + client);
+            System.out.println("Updating to: " + client + " with " + Arrays.toString(data));
+
             try{
                 OutputStream out = client.getOutputStream();
                 out.write(data);

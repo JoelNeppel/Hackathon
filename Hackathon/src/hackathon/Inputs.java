@@ -8,12 +8,10 @@ import java.io.OutputStream;
 
 public class Inputs implements KeyListener {
 
-	private Socket client;
 	private OutputStream out;
 
 	public Inputs(Socket client)
 	{
-		this.client = client;
 		try 
 		{
 			out = client.getOutputStream();
@@ -36,7 +34,6 @@ public class Inputs implements KeyListener {
 	@Override
 	public void keyPressed(KeyEvent e) {
 		System.out.println(e.getKeyChar());
-		Packet p = new Packet();
 		try
 		{
 			switch(e.getKeyChar()){
