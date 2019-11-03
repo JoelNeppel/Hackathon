@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 public class Paint extends JPanel {
 		
 	private static DoublyLinkedList<Squirrel> squirrels;
-	private static Nut[] nuts;
+	private static Nut[] nuts = new Nut[100];
 	private static BufferedImage FirstPlace = null;
 	private static BufferedImage SecondPlace = null;
 	private static BufferedImage ThirdPlace = null;
@@ -125,11 +125,35 @@ public class Paint extends JPanel {
 					int numSquirrels = ByteHelp.bytesToInt(bytes);
 					in.read(bytes);
 					int numNuts = ByteHelp.bytesToInt(bytes);
+
+					for(int i = 0; i < numSquirrels; i++)
+					{
+
+					}
+
+					for(int i = 0; i < nuts.length; i++)
+					{
+						if(i < numNuts)
+						{
+							in.read(bytes);
+							int x = ByteHelp.bytesToInt(bytes);
+							in.read(bytes);
+							int y = ByteHelp.bytesToInt(bytes);
+
+							nuts[i] = new Nut(x, y);
+						}
+						else
+						{
+							nuts[i] = null;
+						}
+					}
+
 				}
 				catch(IOException e)
 				{
 
 				}
+				repaint();
 			}
 
 		}).start();

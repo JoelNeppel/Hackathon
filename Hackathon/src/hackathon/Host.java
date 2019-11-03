@@ -41,6 +41,7 @@ public class Host
                 Socket client = server.accept();
                 client.setTcpNoDelay(true);
                 clients.add(client);    
+                handleClient(client);
             }
             catch(IOException e)
             {
@@ -151,7 +152,7 @@ public class Host
         }).start();
     }
 
-    private void handleClient(Socket client)
+    private static void handleClient(Socket client)
     { 
         new Thread(()->
         {
