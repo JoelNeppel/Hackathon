@@ -19,6 +19,7 @@ public class Host
         nuts = new DoublyLinkedList<>();
         clients = new DoublyLinkedList<>();
         nutGeneration();
+        doRounds();
         ServerSocket server = null;
         while(null == server)
         {
