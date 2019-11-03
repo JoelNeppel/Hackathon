@@ -106,11 +106,11 @@ public class Host
                 //Only update 40 times a second
                 long timeTaken = System.currentTimeMillis() - lastUpdate;
                 lastUpdate = System.currentTimeMillis(); 
-                if(timeTaken < 40)
+                if(timeTaken < updateTime)
                 {
                     try
                     {
-                        Thread.sleep(40 - timeTaken);
+                        Thread.sleep(updateTime - timeTaken);
 
                     }
                     catch(InterruptedException e)

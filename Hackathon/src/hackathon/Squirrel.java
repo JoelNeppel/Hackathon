@@ -39,7 +39,7 @@ public class Squirrel
 
     public Movement getDirection()
     {
-        return null;
+        return dir;
     }
 
     public void addNut()
