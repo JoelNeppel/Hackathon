@@ -2,10 +2,8 @@ package host;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.Random;
 
 import nutty.ByteHelp;
@@ -17,17 +15,14 @@ import nutty.Squirrel;
 
 public class Host
 {
-	private static DoublyLinkedList<Squirrel> squirrels;
-
-	private static DoublyLinkedList<Socket> clients;
-
 	private static DoublyLinkedList<Nut> nuts; // haha nuts
+
+	private static DoublyLinkedList<Client> clients;
 
 	private static boolean allowEntry;
 
 	public static void main(String[] args)
 	{
-		squirrels = new DoublyLinkedList<>();
 		nuts = new DoublyLinkedList<>();
 		clients = new DoublyLinkedList<>();
 		nutGeneration();
@@ -56,7 +51,6 @@ public class Host
 					if(allowEntry)
 					{
 						client.setTcpNoDelay(true);
-						clients.add(client);
 						handleClient(client);
 						done = true;
 					}
@@ -102,27 +96,9 @@ public class Host
 			while(true)
 			{
 				// Do player movements/updates
-				for(Squirrel s : squirrels)// For each squirrel in list
+				for(Client c : clients)// For each squirrel in list
 				{
-					switch(s.getDirection())
-					{
-						case UP:
-							s.move(0, -2);
-							break;
-						case DOWN:
-							s.move(0, 2);
-							break;
-						case LEFT:
-							s.move(-2, 0);
-							break;
-						case RIGHT:
-							s.move(2, 0);
-						default:
-							break;
-					}
-					checkNuts(s);
-					checkTouching(s);
-					checkBoundry(s);
+					c.doMovement(clients, nuts);
 				}
 
 				// Send updates to players
@@ -149,129 +125,6 @@ public class Host
 				}
 			}
 		}).start();
-	}
-
-	private static void checkNuts(Squirrel s)
-	{
-		for(Nut n : nuts)
-		{
-			if(s.touched(n.getX(), n.getY()))
-			{
-				s.addNut();
-				nuts.remove(n);
-			}
-		}
-	}
-
-	private static void checkTouching(Squirrel s)
-	{
-		for(Squirrel n : squirrels)
-		{
-			if(s.touched(n.getRect()))
-			{
-				int moveDist;
-				if(s.getNumNuts() > n.getNumNuts())
-				{
-					moveDist = 10 + s.getNumNuts();
-					if(moveDist > 50)
-					{
-						moveDist = 50;
-					}
-					switch(s.getDirection())
-					{
-						case UP:
-							n.move(0, -moveDist);
-							break;
-						case DOWN:
-							n.move(0, moveDist);
-							break;
-						case LEFT:
-							n.move(-moveDist, 0);
-							break;
-						case RIGHT:
-							n.move(moveDist, 0);
-							break;
-						case STILL:
-							break;
-					}
-				}
-				else if(s.getNumNuts() < n.getNumNuts())
-				{
-					moveDist = 10 + n.getNumNuts();
-					if(moveDist > 50)
-					{
-						moveDist = 50;
-					}
-					switch(n.getDirection())
-					{
-						case UP:
-							s.move(0, -moveDist);
-							break;
-						case DOWN:
-							s.move(0, moveDist);
-							break;
-						case LEFT:
-							s.move(-moveDist, 0);
-							break;
-						case RIGHT:
-							s.move(moveDist, 0);
-							break;
-						case STILL:
-							break;
-					}
-				}
-				else
-				{
-					moveDist = 10 + s.getNumNuts();
-					if(moveDist > 50)
-					{
-						moveDist = 50;
-					}
-					switch(s.getDirection())
-					{
-						case UP:
-							n.move(0, -moveDist);
-							s.move(0, moveDist);
-							break;
-						case DOWN:
-							n.move(0, moveDist);
-							s.move(0, -moveDist);
-							break;
-						case LEFT:
-							n.move(-moveDist, 0);
-							s.move(moveDist, 0);
-							break;
-						case RIGHT:
-							n.move(moveDist, 0);
-							s.move(-moveDist, 0);
-							break;
-						case STILL:
-							break;
-					}
-				}
-			}
-		}
-	}
-
-	private static void checkBoundry(Squirrel s)
-	{
-		if(s.getX() < 0)
-		{
-			s.setLocation(0, s.getY());
-		}
-		else if(s.getX() > 900)
-		{
-			s.setLocation(900, s.getY());
-		}
-
-		if(s.getY() < 0)
-		{
-			s.setLocation(s.getX(), 0);
-		}
-		else if(s.getY() > 900)
-		{
-			s.setLocation(s.getX(), 900);
-		}
 	}
 
 	private static byte[] getBytes()
@@ -317,26 +170,6 @@ public class Host
 
 	}
 
-	private static void update(Socket client, byte[] data)
-	{
-		new Thread(()->
-		{
-			try
-			{
-				OutputStream out = client.getOutputStream();
-				out.write(data);
-			}
-			catch(SocketException e)
-			{
-				clients.remove(client);
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-		}).start();
-	}
-
 	private static void handleClient(Socket client)
 	{
 		new Thread(()->
@@ -348,7 +181,7 @@ public class Host
 				id = rand.nextInt(100);
 			}
 
-			Squirrel squirrel = new Squirrel(id, rand.nextInt(1000), 850);
+			Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);
 			rand = null;
 			squirrels.add(squirrel);
 			byte[] bytes = ByteHelp.toBytes(id);
