@@ -1,10 +1,13 @@
-package hackathon;
+package client;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
+
+import nutty.ByteHelp;
+import nutty.Movement;
 
 public class Inputs implements KeyListener
 {

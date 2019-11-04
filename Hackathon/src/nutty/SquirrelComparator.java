@@ -1,4 +1,4 @@
-package hackathon;
+package nutty;
 
 import java.util.Comparator;
 

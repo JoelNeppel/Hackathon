@@ -1,4 +1,4 @@
-package hackathon;
+package nutty;
 
 public class Constants
 {

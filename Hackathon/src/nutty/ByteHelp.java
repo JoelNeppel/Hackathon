@@ -1,4 +1,4 @@
-package hackathon;
+package nutty;
 
 /**
  * Class for converting numbers to bytes and bytes to numbers.

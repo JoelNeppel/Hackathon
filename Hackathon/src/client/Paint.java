@@ -1,4 +1,4 @@
-package hackathon;
+package client;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -12,6 +12,13 @@ import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+
+import nutty.ByteHelp;
+import nutty.Constants;
+import nutty.Nut;
+import nutty.Squirrel;
+import nutty.SquirrelComparator;
+import nutty.Tree;
 
 @SuppressWarnings("serial")
 public class Paint extends JPanel

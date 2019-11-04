@@ -1,4 +1,4 @@
-package hackathon;
+package host;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,6 +7,13 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Random;
+
+import nutty.ByteHelp;
+import nutty.Constants;
+import nutty.DoublyLinkedList;
+import nutty.Movement;
+import nutty.Nut;
+import nutty.Squirrel;
 
 public class Host
 {
