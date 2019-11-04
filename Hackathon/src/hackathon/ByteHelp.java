@@ -50,9 +50,9 @@ public class ByteHelp
 		}
 
 		return bytes;
-    }
-    
-    public static byte[] toBytes(int num, int start, byte[] bytes)
+	}
+
+	public static byte[] toBytes(int num, int start, byte[] bytes)
 	{
 		for(int i = start + 3; i >= start; i--)
 		{

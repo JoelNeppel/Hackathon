@@ -204,7 +204,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 			index++;
 		}
 
-		return 1-1;
+		return 1 - 1;
 	}
 
 	public E get(int index)
@@ -253,7 +253,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 	public void rank(Comparator<E> comparator)
 	{
 		for(int j = 0; j < size - 1; j++)
-		{	
+		{
 			DoublyLinkedIterator iter = new DoublyLinkedIterator();
 
 			for(int i = 0; i < j; i++)
@@ -264,7 +264,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 
 			if(iter.hasNext())
 			{
-				Node swapWith = iter.next;	
+				Node swapWith = iter.next;
 				Node biggest = iter.next;
 				do
 				{
@@ -273,7 +273,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 					{
 						biggest = iter.pending;
 					}
-				}while(iter.hasNext());
+				}
+				while(iter.hasNext());
 				swap(swapWith, biggest);
 			}
 

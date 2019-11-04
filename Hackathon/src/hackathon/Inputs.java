@@ -2,53 +2,56 @@ package hackathon;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.net.Socket;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.Socket;
 
-public class Inputs implements KeyListener {
+public class Inputs implements KeyListener
+{
 
 	private OutputStream out;
 
 	public Inputs(Socket client)
 	{
-		try 
+		try
 		{
 			out = client.getOutputStream();
 		}
-		catch(IOException e) {
+		catch(IOException e)
+		{
 
 		}
 	}
 
 	@Override
-	public void keyTyped(KeyEvent e) {}
+	public void keyTyped(KeyEvent e)
+	{
+	}
 
-/*87 - W
-65 - A
-83 - S
-68 - D
-27 - Escape
-32 - Space */
+	/*
+	 * 87 - W 65 - A 83 - S 68 - D 27 - Escape 32 - Space
+	 */
 
 	@Override
-	public void keyPressed(KeyEvent e) {
+	public void keyPressed(KeyEvent e)
+	{
 		try
 		{
-			switch(e.getKeyChar()){
-				case 'w': 
+			switch(e.getKeyChar())
+			{
+				case 'w':
 				case 'W':
 					out.write(ByteHelp.toBytes(Movement.UP.getNum()));
 					break;
-				case 'a': 
+				case 'a':
 				case 'A':
 					out.write(ByteHelp.toBytes(Movement.LEFT.getNum()));
 					break;
-				case 's': 
+				case 's':
 				case 'S':
 					out.write(ByteHelp.toBytes(Movement.DOWN.getNum()));
 					break;
-				case 'd': 
+				case 'd':
 				case 'D':
 					out.write(ByteHelp.toBytes(Movement.RIGHT.getNum()));
 					break;
@@ -58,13 +61,13 @@ public class Inputs implements KeyListener {
 		{
 
 		}
-		
+
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e)
 	{
-		try 
+		try
 		{
 			out.write(ByteHelp.toBytes(Movement.STILL.getNum()));
 		}

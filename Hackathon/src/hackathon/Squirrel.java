@@ -4,114 +4,117 @@ import java.awt.Rectangle;
 
 public class Squirrel
 {
-    private Rectangle loc;
-    private int playerID;
-    private int numNuts;
-    private Movement dir;
+	private Rectangle loc;
 
-    public Squirrel(int id, int x, int y)
-    {
-        playerID = id;
-        loc = new Rectangle(x, y, 100, 100);
-        dir = Movement.STILL;
-    }
+	private int playerID;
 
-    public void setLocation(int x, int y)
-    {
-        loc.setLocation(x, y);
-    }
+	private int numNuts;
 
-    public void move(int x, int y)
-    {
-        loc.setLocation(loc.x + x, loc.y + y);
-    }
+	private Movement dir;
 
-    public Rectangle getRect()
-    {
-        return loc;
-    }
+	public Squirrel(int id, int x, int y)
+	{
+		playerID = id;
+		loc = new Rectangle(x, y, 100, 100);
+		dir = Movement.STILL;
+	}
 
-    public int getX()
-    {
-        return (int) loc.getX();
-    }
+	public void setLocation(int x, int y)
+	{
+		loc.setLocation(x, y);
+	}
 
-    public int getY() 
-    {
-        return (int) loc.getY();
-    }
+	public void move(int x, int y)
+	{
+		loc.setLocation(loc.x + x, loc.y + y);
+	}
 
-    public Movement getDirection()
-    {
-        return dir;
-    }
+	public Rectangle getRect()
+	{
+		return loc;
+	}
 
-    public void addNut()
-    {
-        numNuts++;
-    }
+	public int getX()
+	{
+		return (int) loc.getX();
+	}
 
-    public void setNuts(int nuts)
-    {
-        numNuts = nuts;
-    }
+	public int getY()
+	{
+		return (int) loc.getY();
+	}
 
-    public int getNumNuts()
-    {
-        return numNuts;
-    }
+	public Movement getDirection()
+	{
+		return dir;
+	}
 
-    public Movement getMovement()
-    {
-        return dir;
-    }
+	public void addNut()
+	{
+		numNuts++;
+	}
 
-    public void setMovement(Movement dir)
-    {
-        this.dir = dir;
-    }
+	public void setNuts(int nuts)
+	{
+		numNuts = nuts;
+	}
 
-    public boolean touched(int x, int y)
-    {
-        return loc.contains(x, y);
-    }
+	public int getNumNuts()
+	{
+		return numNuts;
+	}
 
-    public boolean touched(Rectangle r)
-    {
-        return loc.intersects(r);
-    }
+	public Movement getMovement()
+	{
+		return dir;
+	}
 
-    public int getID()
-    {
-        return playerID;
-    }
+	public void setMovement(Movement dir)
+	{
+		this.dir = dir;
+	}
 
-    public byte[] getBytes()
-    {
-        byte[] data = new byte[16];
-        ByteHelp.toBytes(playerID, 0, data);
-        ByteHelp.toBytes(loc.x, 4, data);
-        ByteHelp.toBytes(loc.y, 8, data);
-        ByteHelp.toBytes(numNuts, 12, data);
+	public boolean touched(int x, int y)
+	{
+		return loc.contains(x, y);
+	}
 
-        return data;
-    }
+	public boolean touched(Rectangle r)
+	{
+		return loc.intersects(r);
+	}
 
-    @Override
-    public boolean equals(Object o)
-    {
-        if(o.getClass() != Squirrel.class)
-        {
-            return false;
-        }
+	public int getID()
+	{
+		return playerID;
+	}
 
-        Squirrel s = (Squirrel) o;
-        return s.playerID == this.playerID;
-    }
+	public byte[] getBytes()
+	{
+		byte[] data = new byte[16];
+		ByteHelp.toBytes(playerID, 0, data);
+		ByteHelp.toBytes(loc.x, 4, data);
+		ByteHelp.toBytes(loc.y, 8, data);
+		ByteHelp.toBytes(numNuts, 12, data);
 
-    @Override
-    public String toString()
-    {
-        return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ") with: " + numNuts + " nuts.";
-    }
+		return data;
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if(o.getClass() != Squirrel.class)
+		{
+			return false;
+		}
+
+		Squirrel s = (Squirrel) o;
+		return s.playerID == this.playerID;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ") with: " + numNuts + " nuts.";
+	}
 }
