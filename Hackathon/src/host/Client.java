@@ -5,28 +5,48 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import communication.ByteHelp;
 import nutty.DoublyLinkedList;
 import nutty.Movement;
 import nutty.Nut;
 import nutty.Squirrel;
 
 /**
- * @author JoelNeppel
+ * Class to store a socket and squirrel for each client.
+ * 
+ * @author JoelNeppel, zgrewell
  *
  */
 public class Client
 {
+	/**
+	 * The socket to communicate with the client
+	 */
 	private Socket soc;
 
+	/**
+	 * The squirrel for the client
+	 */
 	private Squirrel squirrel;
 
+	/**
+	 * Constructs a client with the given socket and squirrel
+	 * @param socket
+	 *     The socket to use
+	 * @param player
+	 *     The player's squirrel
+	 */
 	public Client(Socket socket, Squirrel player)
 	{
 		soc = socket;
 		squirrel = player;
 	}
 
+	/**
+	 * Sends the given data to the client. Starts a new thread so the thread calling
+	 * does not wait for send to finish.
+	 * @param data
+	 *     The data to send
+	 */
 	public void write(byte[] data)
 	{
 		new Thread(()->
@@ -43,11 +63,24 @@ public class Client
 		}).start();
 	}
 
+	/**
+	 * Returns the squirrel for the client.
+	 * @return The client's squirrel
+	 */
 	public Squirrel getSquirrel()
 	{
 		return squirrel;
 	}
 
+	/**
+	 * Moves the squirrel in the given direction and checks if they have collected
+	 * any nuts, are touching another player, or have reached the edge of the
+	 * screen.
+	 * @param clients
+	 *     The list of clients used to check if they're touching
+	 * @param nuts
+	 *     The list of nuts usd to check if the player collected a nut
+	 */
 	public void doMovement(DoublyLinkedList<Client> clients, DoublyLinkedList<Nut> nuts)
 	{
 		switch(squirrel.getDirection())
@@ -71,6 +104,13 @@ public class Client
 		checkBoundry();
 	}
 
+	/**
+	 * Checks if a player is touching another player based on if their rectangles
+	 * intersects. Moves players apart if they are touching with the amount of
+	 * movement based on number of nuts.
+	 * @param clients
+	 *     The list of clients to use
+	 */
 	private void checkTouching(DoublyLinkedList<Client> clients)
 	{
 		for(Client c : clients)
@@ -162,6 +202,13 @@ public class Client
 		}
 	}
 
+	/**
+	 * Checks if the squirrel collected a nut by checking if the nut point is within
+	 * the squirrel's rectangle. Adds a nut to the squirrel and removes nut from
+	 * list if the player collected the nut.
+	 * @param nuts
+	 *     The list of nuts to use
+	 */
 	private void checkNuts(DoublyLinkedList<Nut> nuts)
 	{
 		for(Nut n : nuts)
@@ -174,6 +221,10 @@ public class Client
 		}
 	}
 
+	/**
+	 * Checks if the player has reached the screen boundry. Moves the player back
+	 * onto the screen if they have.
+	 */
 	private void checkBoundry()
 	{
 		if(squirrel.getX() < 0)
@@ -195,6 +246,10 @@ public class Client
 		}
 	}
 
+	/**
+	 * Continuously reads data sent from the client to update the direction the
+	 * player is moving.
+	 */
 	private void updateData()
 	{
 		InputStream in = null;
@@ -210,15 +265,16 @@ public class Client
 			}
 		}
 
-		while(!client.isClosed())
+		while(!soc.isClosed())
 		{
 			try
 			{
-				if(in.available() >= 4)
+				if(in.available() >= 1)
 				{
-					bytes = new byte[4];
-					in.read(bytes);
-					squirrel.setMovement(Movement.intToMov(ByteHelp.bytesToInt(bytes)));
+					char got = (char) in.read();
+					squirrel.setMovement(Movement.charToMov(got));
+
+					// TODO Disconnect command
 				}
 				else
 				{
@@ -238,8 +294,8 @@ public class Client
 			}
 
 		}
-		squirrels.remove(squirrel);
-		clients.remove(client);
+
+		// TODO remove player when they disconnect
 	}
 
 	@Override

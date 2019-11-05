@@ -44,19 +44,19 @@ public class Inputs implements KeyListener
 			{
 				case 'w':
 				case 'W':
-					out.write(ByteHelp.toBytes(Movement.UP.getNum()));
+					out.write(ByteHelp.toBytes(Movement.UP.getChar()));
 					break;
 				case 'a':
 				case 'A':
-					out.write(ByteHelp.toBytes(Movement.LEFT.getNum()));
+					out.write(ByteHelp.toBytes(Movement.LEFT.getChar()));
 					break;
 				case 's':
 				case 'S':
-					out.write(ByteHelp.toBytes(Movement.DOWN.getNum()));
+					out.write(ByteHelp.toBytes(Movement.DOWN.getChar()));
 					break;
 				case 'd':
 				case 'D':
-					out.write(ByteHelp.toBytes(Movement.RIGHT.getNum()));
+					out.write(ByteHelp.toBytes(Movement.RIGHT.getChar()));
 					break;
 			}
 		}
@@ -72,7 +72,7 @@ public class Inputs implements KeyListener
 	{
 		try
 		{
-			out.write(ByteHelp.toBytes(Movement.STILL.getNum()));
+			out.write(ByteHelp.toBytes(Movement.STILL.getChar()));
 		}
 		catch(IOException r)
 		{

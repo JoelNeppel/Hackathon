@@ -11,20 +11,35 @@ import nutty.DoublyLinkedList;
 import nutty.Nut;
 import nutty.Squirrel;
 
+/**
+ * Methods and data that will run on the host.
+ * 
+ * @author JoelNeppel
+ *
+ */
 public class Host
 {
+	/**
+	 * The list of nuts
+	 */
 	private static DoublyLinkedList<Nut> nuts; // haha nuts
 
+	/**
+	 * The list of clients
+	 */
 	private static DoublyLinkedList<Client> clients;
 
 	private static boolean allowEntry;
 
+	/**
+	 * Sets up all resources necessary for clients to connect and play game.
+	 * Continuously accepts connections from players.
+	 * @param args
+	 */
 	public static void main(String[] args)
 	{
 		nuts = new DoublyLinkedList<>();
 		clients = new DoublyLinkedList<>();
-
-		nutGeneration();
 
 		ServerSocket server = null;
 		while(null == server)
@@ -39,6 +54,7 @@ public class Host
 			}
 		}
 
+		nutGeneration();
 		doRounds();
 
 		while(!Thread.interrupted())
@@ -135,14 +151,15 @@ public class Host
 			{
 				allowEntry = false;
 				int at = 0;
-				byte[] data = new byte[8 + 16 * squirrels.size() + 8 * nuts.size()];
-				ByteHelp.toBytes(squirrels.size(), at, data);
+				byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
+				ByteHelp.toBytes(clients.size(), at, data);
 				at += 4;
 				ByteHelp.toBytes(nuts.size(), at, data);
 				at += 4;
 
-				for(Squirrel s : squirrels)
+				for(Client c : clients)
 				{
+					Squirrel s = c.getSquirrel();
 					byte[] sData = s.getBytes();
 					for(int i = 0; i < 16; i++)
 					{
@@ -177,6 +194,7 @@ public class Host
 	 */
 	private static void handleClient(Socket soc)
 	{
+		// Generate unique ID
 		Random rand = new Random();
 		int id = rand.nextInt(100);
 		while(clients.contains(new Client(null, new Squirrel(id, 0, 0))))
@@ -184,8 +202,8 @@ public class Host
 			id = rand.nextInt(100);
 		}
 
+		// Create new client and add to list of clients
 		Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);
-		rand = null;
 		Client newC = new Client(soc, squirrel);
 		clients.add(newC);
 	}

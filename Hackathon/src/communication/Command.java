@@ -1,6 +1,8 @@
 package communication;
 
 /**
+ * Commands used to communicate updates between host and clients.
+ * 
  * @author JoelNeppel
  *
  */
@@ -12,25 +14,44 @@ public enum Command
 	ADD_NUT('N'),
 	REMOVE_NUT('R');
 
+	/**
+	 * The char to send as command
+	 */
 	private char data;
 
-	private Command(char b)
+	/**
+	 * Constructs enum with the given command char
+	 * @param c
+	 *     The char command
+	 */
+	private Command(char c)
 	{
-		data = b;
+		data = c;
 	}
 
-	public char getByte()
+	/**
+	 * Returns the char command representation for the command.
+	 * @return The char command
+	 */
+	public char getChar()
 	{
 		return data;
 	}
 
-	public Command byteToCommand(char b)
+	/**
+	 * Returns the command that corresponds with the given char, or null if there is
+	 * no correspondence.
+	 * @param c
+	 *     The char to search for
+	 * @return The command that the char represents
+	 */
+	public Command byteToCommand(char c)
 	{
-		for(Command c : Command.values())
+		for(Command com : Command.values())
 		{
-			if(b == c.data)
+			if(c == com.data)
 			{
-				return c;
+				return com;
 			}
 		}
 

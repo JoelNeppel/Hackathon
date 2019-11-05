@@ -8,48 +8,48 @@ package nutty;
  */
 public enum Movement
 {
-	UP(0),
-	DOWN(1),
-	LEFT(2),
-	RIGHT(3),
-	STILL(4);
+	UP('W'),
+	DOWN('S'),
+	LEFT('A'),
+	RIGHT('D'),
+	STILL(' ');
 
 	/**
-	 * The number representation for the direction.
+	 * The char representation for the direction.
 	 */
-	private int num;
+	private char c;
 
 	/**
-	 * Constructs new movement with the given number representation.
-	 * @param num
-	 *     The number to use
+	 * Constructs new movement with the given char representation.
+	 * @param c
+	 *     The char to use
 	 */
-	private Movement(int num)
+	private Movement(char c)
 	{
-		this.num = num;
+		this.c = c;
 	}
 
 	/**
-	 * Returns the numerical representation.
-	 * @return The number representation
+	 * Returns the char representation.
+	 * @return The char representation
 	 */
-	public int getNum()
+	public char getChar()
 	{
-		return num;
+		return c;
 	}
 
 	/**
-	 * Returns the movement that is associated with the given integer, or null if
-	 * the number does not represent a movement.
-	 * @param i
-	 *     The number that represents a movement
-	 * @return The movement associated with the number
+	 * Returns the movement that is associated with the given char, or null if the
+	 * char does not represent a movement.
+	 * @param c
+	 *     The char that represents a movement
+	 * @return The movement associated with the char
 	 */
-	public static Movement intToMov(int i)
+	public static Movement charToMov(char c)
 	{
 		for(Movement m : Movement.values())
 		{
-			if(m.num == i)
+			if(m.c == c)
 			{
 				return m;
 			}
