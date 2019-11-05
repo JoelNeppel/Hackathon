@@ -1,4 +1,4 @@
-package nutty;
+package communication;
 
 /**
  * Class for converting numbers to bytes and bytes to numbers.

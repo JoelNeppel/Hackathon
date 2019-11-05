@@ -1,10 +1,13 @@
 package host;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 
+import communication.ByteHelp;
 import nutty.DoublyLinkedList;
+import nutty.Movement;
 import nutty.Nut;
 import nutty.Squirrel;
 
@@ -190,5 +193,65 @@ public class Client
 		{
 			squirrel.setLocation(squirrel.getX(), 900);
 		}
+	}
+
+	private void updateData()
+	{
+		InputStream in = null;
+		while(null == in)
+		{
+			try
+			{
+				in = soc.getInputStream();
+			}
+			catch(IOException e)
+			{
+
+			}
+		}
+
+		while(!client.isClosed())
+		{
+			try
+			{
+				if(in.available() >= 4)
+				{
+					bytes = new byte[4];
+					in.read(bytes);
+					squirrel.setMovement(Movement.intToMov(ByteHelp.bytesToInt(bytes)));
+				}
+				else
+				{
+					try
+					{
+						Thread.sleep(10);
+					}
+					catch(InterruptedException e)
+					{
+
+					}
+				}
+			}
+			catch(IOException e)
+			{
+
+			}
+
+		}
+		squirrels.remove(squirrel);
+		clients.remove(client);
+	}
+
+	@Override
+	public boolean equals(Object other)
+	{
+		if(other == null || this.getClass() != other.getClass())
+		{
+			return false;
+		}
+
+		Client o = (Client) other;
+
+		return this.squirrel.getID() == o.squirrel.getID();
 	}
 }

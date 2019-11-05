@@ -13,11 +13,11 @@ import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import nutty.ByteHelp;
+import communication.ByteHelp;
 import nutty.Constants;
 import nutty.Nut;
 import nutty.Squirrel;
-import nutty.SquirrelComparator;
+import nutty.SquirrelNutComparator;
 import nutty.Tree;
 
 @SuppressWarnings("serial")
@@ -36,7 +36,7 @@ public class Paint extends JPanel
 
 	private static BufferedImage BasicImage = null;
 
-	private static SquirrelComparator compare = new SquirrelComparator();
+	private static SquirrelNutComparator compare = new SquirrelNutComparator();
 
 	public Paint()
 	{

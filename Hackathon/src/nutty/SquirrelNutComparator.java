@@ -2,7 +2,14 @@ package nutty;
 
 import java.util.Comparator;
 
-public class SquirrelComparator implements Comparator<Squirrel>
+/**
+ * Compares squirrels base on the number of nuts the have, or ID if they have
+ * the same number of nuts.
+ * 
+ * @author JoelNeppel
+ *
+ */
+public class SquirrelNutComparator implements Comparator<Squirrel>
 {
 	@Override
 	public int compare(Squirrel s1, Squirrel s2)

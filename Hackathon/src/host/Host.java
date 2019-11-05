@@ -1,15 +1,13 @@
 package host;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
-import nutty.ByteHelp;
+import communication.ByteHelp;
 import nutty.Constants;
 import nutty.DoublyLinkedList;
-import nutty.Movement;
 import nutty.Nut;
 import nutty.Squirrel;
 
@@ -25,8 +23,9 @@ public class Host
 	{
 		nuts = new DoublyLinkedList<>();
 		clients = new DoublyLinkedList<>();
+
 		nutGeneration();
-		doRounds();
+
 		ServerSocket server = null;
 		while(null == server)
 		{
@@ -39,6 +38,8 @@ public class Host
 
 			}
 		}
+
+		doRounds();
 
 		while(!Thread.interrupted())
 		{
@@ -89,24 +90,24 @@ public class Host
 	 */
 	private static void doRounds()
 	{
+		int updateTime = 1000 / 40;
 		new Thread(()->
 		{
 			long lastUpdate = System.currentTimeMillis();
-			int updateTime = 1000 / 40;
 			while(true)
 			{
 				// Do player movements/updates
-				for(Client c : clients)// For each squirrel in list
+				for(Client c : clients)
 				{
 					c.doMovement(clients, nuts);
 				}
 
-				// Send updates to players
-				// get packet data and calculate cordinets?
+				// Convert data into bytes
 				byte[] data = getBytes();
-				for(Socket client : clients)
+				// Send bytes to each client
+				for(Client c : clients)
 				{
-					update(client, data);
+					c.write(data);
 				}
 
 				// Only update 40 times a second
@@ -117,7 +118,6 @@ public class Host
 					try
 					{
 						Thread.sleep(updateTime - timeTaken);
-
 					}
 					catch(InterruptedException e)
 					{
@@ -170,67 +170,30 @@ public class Host
 
 	}
 
-	private static void handleClient(Socket client)
+	/**
+	 * Creates a new client with an ID [0, 100) using the given socket.
+	 * @param soc
+	 *     The socket to use for communicate to client
+	 */
+	private static void handleClient(Socket soc)
 	{
-		new Thread(()->
+		Random rand = new Random();
+		int id = rand.nextInt(100);
+		while(clients.contains(new Client(null, new Squirrel(id, 0, 0))))
 		{
-			Random rand = new Random();
-			int id = rand.nextInt(100);
-			while(squirrels.contains(new Squirrel(id, 0, 0)))
-			{
-				id = rand.nextInt(100);
-			}
+			id = rand.nextInt(100);
+		}
 
-			Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);
-			rand = null;
-			squirrels.add(squirrel);
-			byte[] bytes = ByteHelp.toBytes(id);
-			InputStream in = null;
-			while(null == in)
-			{
-				try
-				{
-					in = client.getInputStream();
-				}
-				catch(IOException e)
-				{
-
-				}
-			}
-
-			while(!client.isClosed())
-			{
-				try
-				{
-					if(in.available() >= 4)
-					{
-						bytes = new byte[4];
-						in.read(bytes);
-						squirrel.setMovement(Movement.intToMov(ByteHelp.bytesToInt(bytes)));
-					}
-					else
-					{
-						try
-						{
-							Thread.sleep(10);
-						}
-						catch(InterruptedException e)
-						{
-
-						}
-					}
-				}
-				catch(IOException e)
-				{
-
-				}
-
-			}
-			squirrels.remove(squirrel);
-			clients.remove(client);
-		}).start();
+		Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);
+		rand = null;
+		Client newC = new Client(soc, squirrel);
+		clients.add(newC);
 	}
 
+	/**
+	 * Begins a new thread that generates a new nut every 1250 milliseconds with a
+	 * maximum of 30 nuts.
+	 */
 	private static void nutGeneration()
 	{
 		new Thread(()->

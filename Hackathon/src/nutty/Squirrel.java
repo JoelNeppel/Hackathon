@@ -2,6 +2,8 @@ package nutty;
 
 import java.awt.Rectangle;
 
+import communication.ByteHelp;
+
 public class Squirrel
 {
 	private Rectangle loc;

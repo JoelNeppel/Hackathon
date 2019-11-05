@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import nutty.ByteHelp;
+import communication.ByteHelp;
 import nutty.Movement;
 
 public class Inputs implements KeyListener

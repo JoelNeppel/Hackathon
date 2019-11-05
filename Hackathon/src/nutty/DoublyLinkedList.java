@@ -1,6 +1,5 @@
 package nutty;
 
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -248,37 +247,6 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 
 		return null;
-	}
-
-	public void rank(Comparator<E> comparator)
-	{
-		for(int j = 0; j < size - 1; j++)
-		{
-			DoublyLinkedIterator iter = new DoublyLinkedIterator();
-
-			for(int i = 0; i < j; i++)
-			{
-				System.out.println("Moved beginning to " + i);
-				iter.next();
-			}
-
-			if(iter.hasNext())
-			{
-				Node swapWith = iter.next;
-				Node biggest = iter.next;
-				do
-				{
-					iter.next();
-					if(comparator.compare(biggest.data, iter.pending.data) > 0)
-					{
-						biggest = iter.pending;
-					}
-				}
-				while(iter.hasNext());
-				swap(swapWith, biggest);
-			}
-
-		}
 	}
 
 	private void swap(Node n1, Node n2)
