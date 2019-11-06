@@ -50,18 +50,25 @@ public class Client
 	 */
 	public void write(byte[] data)
 	{
-		new Thread(()->
+		if(soc.isClosed())
 		{
-			try
+			endPlayer();
+		}
+		else
+		{
+			new Thread(()->
 			{
-				OutputStream out = soc.getOutputStream();
-				out.write(data);
-			}
-			catch(IOException e)
-			{
-				e.printStackTrace();
-			}
-		}).start();
+				try
+				{
+					OutputStream out = soc.getOutputStream();
+					out.write(data);
+				}
+				catch(IOException e)
+				{
+					e.printStackTrace();
+				}
+			}).start();
+		}
 	}
 
 	/**
@@ -284,15 +291,7 @@ public class Client
 						{
 							if('Q' == got)
 							{
-								Host.removeClient(this);
-								Thread.currentThread().interrupt();
-								try
-								{
-									soc.close();
-								}
-								catch(IOException e)
-								{
-								}
+								endPlayer();
 							}
 							else
 							{
@@ -320,6 +319,21 @@ public class Client
 
 			}
 		}).start();
+	}
+
+	/**
+	 * Removes player from list of clients and closes client socket
+	 */
+	private void endPlayer()
+	{
+		Host.removeClient(this);
+		try
+		{
+			soc.close();
+		}
+		catch(IOException e)
+		{
+		}
 	}
 
 	@Override
