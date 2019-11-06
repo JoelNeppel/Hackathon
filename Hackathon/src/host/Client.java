@@ -38,8 +38,6 @@ public class Client
 	public Client(Socket socket, Squirrel player)
 	{
 		soc = socket;
-		System.out.println("created client: " + soc);
-
 		squirrel = player;
 		updateData();
 	}
@@ -284,10 +282,24 @@ public class Client
 						}
 						else
 						{
-							System.out.println("dir null");
+							if('Q' == got)
+							{
+								Host.removeClient(this);
+								Thread.currentThread().interrupt();
+								try
+								{
+									soc.close();
+								}
+								catch(IOException e)
+								{
+								}
+							}
+							else
+							{
+								System.out.println("got");
+							}
 						}
 
-						// TODO Disconnect command
 					}
 					else
 					{
@@ -308,8 +320,6 @@ public class Client
 
 			}
 		}).start();
-
-		// TODO remove player when they disconnect
 	}
 
 	@Override

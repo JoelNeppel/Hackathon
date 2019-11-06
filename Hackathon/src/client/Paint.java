@@ -40,10 +40,11 @@ public class Paint extends JPanel implements WindowListener
 
 	private static SquirrelNutComparator compare = new SquirrelNutComparator();
 
+	private Socket client;
+
 	public Paint()
 	{
 		super();
-		Socket client = null;
 		while(null == client)
 		{
 			try
@@ -81,7 +82,6 @@ public class Paint extends JPanel implements WindowListener
 		frame.pack();
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.addWindowListener(panel);
 		frame.setContentPane(panel);
 
@@ -244,7 +244,14 @@ public class Paint extends JPanel implements WindowListener
 	@Override
 	public void windowClosing(WindowEvent e)
 	{
-		System.out.println("Closing");
+		try
+		{
+
+			client.getOutputStream().write('Q');
+		}
+		catch(IOException e1)
+		{
+		}
 		System.exit(0);
 	}
 

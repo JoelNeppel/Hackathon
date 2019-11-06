@@ -250,4 +250,9 @@ public class Host
 			}
 		}).start();
 	}
+
+	public static void removeClient(Client c)
+	{
+		clients.remove(c);
+	}
 }
