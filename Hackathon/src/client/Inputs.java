@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.Socket;
 
-import communication.ByteHelp;
 import nutty.Movement;
 
 public class Inputs implements KeyListener
@@ -44,19 +43,19 @@ public class Inputs implements KeyListener
 			{
 				case 'w':
 				case 'W':
-					out.write(ByteHelp.toBytes(Movement.UP.getChar()));
+					out.write(Movement.UP.getChar());
 					break;
 				case 'a':
 				case 'A':
-					out.write(ByteHelp.toBytes(Movement.LEFT.getChar()));
+					out.write(Movement.LEFT.getChar());
 					break;
 				case 's':
 				case 'S':
-					out.write(ByteHelp.toBytes(Movement.DOWN.getChar()));
+					out.write(Movement.DOWN.getChar());
 					break;
 				case 'd':
 				case 'D':
-					out.write(ByteHelp.toBytes(Movement.RIGHT.getChar()));
+					out.write(Movement.RIGHT.getChar());
 					break;
 			}
 		}
@@ -72,7 +71,7 @@ public class Inputs implements KeyListener
 	{
 		try
 		{
-			out.write(ByteHelp.toBytes(Movement.STILL.getChar()));
+			out.write(Movement.STILL.getChar());
 		}
 		catch(IOException r)
 		{

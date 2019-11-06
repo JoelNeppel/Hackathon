@@ -282,6 +282,10 @@ public class Client
 						{
 							squirrel.setMovement(dir);
 						}
+						else
+						{
+							System.out.println("dir null");
+						}
 
 						// TODO Disconnect command
 					}
