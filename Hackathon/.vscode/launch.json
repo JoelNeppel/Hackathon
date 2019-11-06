@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Paint",
+            "request": "launch",
+            "mainClass": "client.Paint",
+            "projectName": "Hackathon"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Host",
             "request": "launch",
             "mainClass": "hackathon.Host",

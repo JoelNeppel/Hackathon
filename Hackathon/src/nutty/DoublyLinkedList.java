@@ -249,6 +249,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		return null;
 	}
 
+	@SuppressWarnings("unused")
 	private void swap(Node n1, Node n2)
 	{
 		System.out.println("swapped");
