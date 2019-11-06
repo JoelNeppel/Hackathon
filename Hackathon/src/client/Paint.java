@@ -3,6 +3,8 @@ package client;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,7 +23,7 @@ import nutty.SquirrelNutComparator;
 import nutty.Tree;
 
 @SuppressWarnings("serial")
-public class Paint extends JPanel
+public class Paint extends JPanel implements WindowListener
 {
 
 	private static ArrayList<Squirrel> squirrels;
@@ -79,7 +81,8 @@ public class Paint extends JPanel
 		frame.pack();
 		frame.setSize(1000, 1000);
 		frame.setVisible(true);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(panel);
 		frame.setContentPane(panel);
 
 		panel.requestFocus();
@@ -226,5 +229,55 @@ public class Paint extends JPanel
 			}
 
 		}).start();
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e)
+	{
+		System.out.println("Close");
+		System.exit(0);
+
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e)
+	{
+		// TODO Auto-generated method stub
+
 	}
 }

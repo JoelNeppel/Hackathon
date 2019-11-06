@@ -14,8 +14,7 @@ import nutty.Squirrel;
 /**
  * Methods and data that will run on the host.
  * 
- * @author JoelNeppel
- * @author ZackGrewell
+ * @author JoelNeppel, ZackGrewell
  *
  */
 public class Host
