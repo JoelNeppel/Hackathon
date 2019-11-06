@@ -196,11 +196,22 @@ public class Host
 	{
 		// Generate unique ID
 		Random rand = new Random();
-		int id = rand.nextInt(100);
-		while(clients.contains(new Client(null, new Squirrel(id, 0, 0))))
+		int id = 0;
+		boolean done = true;
+
+		do
 		{
+			done = true;
 			id = rand.nextInt(100);
+			for(Client c : clients)
+			{
+				if(c.getSquirrel().getID() == id)
+				{
+					done = false;
+				}
+			}
 		}
+		while(!done);
 
 		// Create new client and add to list of clients
 		Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);

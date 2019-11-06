@@ -38,7 +38,10 @@ public class Client
 	public Client(Socket socket, Squirrel player)
 	{
 		soc = socket;
+		System.out.println("created client: " + soc);
+
 		squirrel = player;
+		updateData();
 	}
 
 	/**
@@ -252,48 +255,55 @@ public class Client
 	 */
 	private void updateData()
 	{
-		InputStream in = null;
-		while(null == in)
+		new Thread(()->
 		{
-			try
+			InputStream in = null;
+			while(null == in)
 			{
-				in = soc.getInputStream();
-			}
-			catch(IOException e)
-			{
-
-			}
-		}
-
-		while(!soc.isClosed())
-		{
-			try
-			{
-				if(in.available() >= 1)
+				try
 				{
-					char got = (char) in.read();
-					squirrel.setMovement(Movement.charToMov(got));
-
-					// TODO Disconnect command
+					in = soc.getInputStream();
 				}
-				else
+				catch(IOException e)
 				{
-					try
-					{
-						Thread.sleep(10);
-					}
-					catch(InterruptedException e)
-					{
 
-					}
 				}
 			}
-			catch(IOException e)
+
+			while(!soc.isClosed())
 			{
+				try
+				{
+					if(in.available() >= 1)
+					{
+						char got = (char) in.read();
+						Movement dir = Movement.charToMov(got);
+						if(null != dir)
+						{
+							squirrel.setMovement(dir);
+						}
+
+						// TODO Disconnect command
+					}
+					else
+					{
+						try
+						{
+							Thread.sleep(10);
+						}
+						catch(InterruptedException e)
+						{
+
+						}
+					}
+				}
+				catch(IOException e)
+				{
+
+				}
 
 			}
-
-		}
+		}).start();
 
 		// TODO remove player when they disconnect
 	}

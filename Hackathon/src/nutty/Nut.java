@@ -91,7 +91,7 @@ public class Nut
 	@Override
 	public boolean equals(Object other)
 	{
-		if(null != other || other.getClass() != Nut.class)
+		if(null == other || other.getClass() != Nut.class)
 		{
 			return false;
 		}
