@@ -117,7 +117,7 @@ public class Host
 				{
 					try
 					{
-						Thread.sleep(1);// updateTime - timeTaken);
+						Thread.sleep(updateTime - timeTaken);
 					}
 					catch(InterruptedException e)
 					{
