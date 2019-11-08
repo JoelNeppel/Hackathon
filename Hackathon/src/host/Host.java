@@ -29,6 +29,10 @@ public class Host
 	 */
 	private static DoublyLinkedList<Client> clients;
 
+	private static int playerNum;
+
+	private static Random rand;
+
 	/**
 	 * Sets up all resources necessary for clients to connect and play game.
 	 * Continuously accepts connections from players.
@@ -38,6 +42,7 @@ public class Host
 	{
 		nuts = new DoublyLinkedList<>();
 		clients = new DoublyLinkedList<>();
+		rand = new Random();
 
 		ServerSocket server = null;
 		while(null == server)
@@ -93,7 +98,7 @@ public class Host
 		int updateTime = 1000 / 40;
 		new Thread(()->
 		{
-			long lastUpdate = System.currentTimeMillis();
+			long lastUpdate = 0;
 			while(true)
 			{
 				// Do player movements/updates
@@ -127,7 +132,7 @@ public class Host
 		}).start();
 	}
 
-	private static byte[] getBytes()
+	private static synchronized byte[] getBytes()
 	{
 		int at = 0;
 		byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
@@ -164,31 +169,12 @@ public class Host
 	 * @param soc
 	 *     The socket to use for communicate to client
 	 */
-	private static void handleClient(Socket soc)
+	private static synchronized void handleClient(Socket soc)
 	{
-		// Generate unique ID
-		Random rand = new Random();
-		int id = 0;
-		boolean done = true;
-
-		do
-		{
-			done = true;
-			id = rand.nextInt(100);
-			for(Client c : clients)
-			{
-				if(c.getSquirrel().getID() == id)
-				{
-					done = false;
-				}
-			}
-		}
-		while(!done);
-
-		// Create new client and add to list of clients
-		Squirrel squirrel = new Squirrel(id, rand.nextInt(900), 850);
+		Squirrel squirrel = new Squirrel(playerNum, new Random().nextInt(900), 850);
 		Client newC = new Client(soc, squirrel);
 		clients.add(newC);
+		playerNum++;
 	}
 
 	/**
@@ -199,8 +185,6 @@ public class Host
 	{
 		new Thread(()->
 		{
-			Random rand = new Random();
-
 			while(true)
 			{
 				if(nuts.size() < 30)
@@ -225,7 +209,7 @@ public class Host
 		}).start();
 	}
 
-	public static void removeClient(Client c)
+	public static synchronized void removeClient(Client c)
 	{
 		clients.remove(c);
 	}

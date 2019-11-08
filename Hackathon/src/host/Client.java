@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 
 import nutty.DoublyLinkedList;
 import nutty.Movement;
@@ -62,6 +63,10 @@ public class Client
 				{
 					OutputStream out = soc.getOutputStream();
 					out.write(data);
+				}
+				catch(SocketException e)
+				{
+					endPlayer();
 				}
 				catch(IOException e)
 				{
