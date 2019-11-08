@@ -293,10 +293,6 @@ public class Client
 							{
 								endPlayer();
 							}
-							else
-							{
-								System.out.println("got");
-							}
 						}
 
 					}

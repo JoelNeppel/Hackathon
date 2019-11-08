@@ -246,7 +246,6 @@ public class Paint extends JPanel implements WindowListener
 	{
 		try
 		{
-
 			client.getOutputStream().write('Q');
 		}
 		catch(IOException e1)

@@ -29,8 +29,6 @@ public class Host
 	 */
 	private static DoublyLinkedList<Client> clients;
 
-	private static boolean allowEntry;
-
 	/**
 	 * Sets up all resources necessary for clients to connect and play game.
 	 * Continuously accepts connections from players.
@@ -65,23 +63,9 @@ public class Host
 				boolean done = false;
 				while(!done)
 				{
-					if(allowEntry)
-					{
-						client.setTcpNoDelay(true);
-						handleClient(client);
-						done = true;
-					}
-					else
-					{
-						try
-						{
-							Thread.sleep(1);
-						}
-						catch(InterruptedException e)
-						{
-
-						}
-					}
+					client.setTcpNoDelay(true);
+					handleClient(client);
+					done = true;
 				}
 			}
 			catch(IOException e)
@@ -145,45 +129,33 @@ public class Host
 
 	private static byte[] getBytes()
 	{
-		while(true)
+		int at = 0;
+		byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
+		ByteHelp.toBytes(clients.size(), at, data);
+		at += 4;
+		ByteHelp.toBytes(nuts.size(), at, data);
+		at += 4;
+
+		for(Client c : clients)
 		{
-			try
+			Squirrel s = c.getSquirrel();
+			byte[] sData = s.getBytes();
+			for(int i = 0; i < 16; i++)
 			{
-				allowEntry = false;
-				int at = 0;
-				byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
-				ByteHelp.toBytes(clients.size(), at, data);
-				at += 4;
-				ByteHelp.toBytes(nuts.size(), at, data);
-				at += 4;
-
-				for(Client c : clients)
-				{
-					Squirrel s = c.getSquirrel();
-					byte[] sData = s.getBytes();
-					for(int i = 0; i < 16; i++)
-					{
-						data[at] = sData[i];
-						at++;
-					}
-				}
-
-				for(Nut n : nuts)
-				{
-					ByteHelp.toBytes(n.getX(), at, data);
-					at += 4;
-					ByteHelp.toBytes(n.getY(), at, data);
-					at += 4;
-				}
-				allowEntry = true;
-
-				return data;
-			}
-			catch(NullPointerException | IndexOutOfBoundsException e)
-			{
-
+				data[at] = sData[i];
+				at++;
 			}
 		}
+
+		for(Nut n : nuts)
+		{
+			ByteHelp.toBytes(n.getX(), at, data);
+			at += 4;
+			ByteHelp.toBytes(n.getY(), at, data);
+			at += 4;
+		}
+
+		return data;
 
 	}
 
@@ -227,18 +199,20 @@ public class Host
 	{
 		new Thread(()->
 		{
+			Random rand = new Random();
+
 			while(true)
 			{
-				if(nuts.size() < 30 && allowEntry)
+				if(nuts.size() < 30)
 				{
-					Random rand = new Random();
-
 					int x = rand.nextInt(1000);
 					int y = rand.nextInt(1000);
 
-					nuts.add(new Nut(x, y));
+					synchronized(Host.class)
+					{
+						nuts.add(new Nut(x, y));
+					}
 				}
-
 				try
 				{
 					Thread.sleep(1250);
