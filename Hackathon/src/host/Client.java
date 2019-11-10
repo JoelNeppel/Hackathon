@@ -30,6 +30,21 @@ public class Client
 	private Squirrel squirrel;
 
 	/**
+	 * The number of nuts the player had since the last change reset
+	 */
+	private int lastNuts;
+
+	/**
+	 * The x location of the player since the last change reset
+	 */
+	private int lastX;
+
+	/**
+	 * The y location of the player since the last change reset
+	 */
+	private int lastY;
+
+	/**
 	 * Constructs a client with the given socket and squirrel
 	 * @param socket
 	 *     The socket to use
@@ -41,6 +56,7 @@ public class Client
 		soc = socket;
 		squirrel = player;
 		updateData();
+		resetChanges();
 	}
 
 	/**
@@ -74,6 +90,45 @@ public class Client
 				}
 			}).start();
 		}
+	}
+
+	/**
+	 * Returns whether the number of nuts has changed since the last update reset.
+	 * @return True if there's a change, false otherwise
+	 */
+	public boolean nutsChanged()
+	{
+		return squirrel.getNumNuts() == lastNuts;
+	}
+
+	/**
+	 * Returns whether the player x location has changed since the last update
+	 * reset.
+	 * @return True if there's a change, false otherwise
+	 */
+	public boolean xChanged()
+	{
+		return squirrel.getX() == lastX;
+	}
+
+	/**
+	 * Returns whether the player x location has changed since the last update
+	 * reset.
+	 * @return True if there's a change, false otherwise
+	 */
+	public boolean yChanged()
+	{
+		return squirrel.getY() == lastY;
+	}
+
+	/**
+	 * Sets all changes to false.
+	 */
+	public void resetChanges()
+	{
+		lastNuts = squirrel.getNumNuts();
+		lastX = squirrel.getX();
+		lastY = squirrel.getY();
 	}
 
 	/**

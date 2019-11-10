@@ -29,9 +29,11 @@ public class Host
 	 */
 	private static DoublyLinkedList<Client> clients;
 
+	/**
+	 * The number of players that have joined since the last server restart, used
+	 * for player ID
+	 */
 	private static int playerNum;
-
-	private static Random rand;
 
 	/**
 	 * Sets up all resources necessary for clients to connect and play game.
@@ -42,7 +44,6 @@ public class Host
 	{
 		nuts = new DoublyLinkedList<>();
 		clients = new DoublyLinkedList<>();
-		rand = new Random();
 
 		ServerSocket server = null;
 		while(null == server)
@@ -132,6 +133,10 @@ public class Host
 		}).start();
 	}
 
+	/**
+	 * Returns the byte data to send to each client to update the information.
+	 * @return The bytes to send
+	 */
 	private static synchronized byte[] getBytes()
 	{
 		int at = 0;
@@ -165,7 +170,8 @@ public class Host
 	}
 
 	/**
-	 * Creates a new client with an ID [0, 100) using the given socket.
+	 * Creates a new client with their ID being the number of players that joined
+	 * using the given socket.
 	 * @param soc
 	 *     The socket to use for communicate to client
 	 */
@@ -185,6 +191,7 @@ public class Host
 	{
 		new Thread(()->
 		{
+			Random rand = new Random();
 			while(true)
 			{
 				if(nuts.size() < 30)
@@ -197,6 +204,7 @@ public class Host
 						nuts.add(new Nut(x, y));
 					}
 				}
+
 				try
 				{
 					Thread.sleep(1250);
@@ -209,6 +217,11 @@ public class Host
 		}).start();
 	}
 
+	/**
+	 * Removes the given client from the game.
+	 * @param c
+	 *     The client to remove
+	 */
 	public static synchronized void removeClient(Client c)
 	{
 		clients.remove(c);
