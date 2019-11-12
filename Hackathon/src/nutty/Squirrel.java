@@ -26,6 +26,16 @@ public class Squirrel
 		loc.setLocation(x, y);
 	}
 
+	public void setY(int y)
+	{
+		setLocation(loc.x, y);
+	}
+
+	public void setX(int x)
+	{
+		setLocation(x, loc.y);
+	}
+
 	public void move(int x, int y)
 	{
 		loc.setLocation(loc.x + x, loc.y + y);

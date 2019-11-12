@@ -94,7 +94,10 @@ public class ByteHelp
 	{
 		int num = 0;
 
-		for(int i = 0; i < Integer.BYTES; i++)
+		// Length of bytes to allow for integers to be created from variable number of
+		// bytes
+		int numBytes = Math.min(Integer.BYTES, bytes.length);
+		for(int i = 0; i < numBytes; i++)
 		{
 			num <<= Byte.SIZE;
 			num |= bytes[i] & 0xFF;
