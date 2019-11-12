@@ -16,11 +16,17 @@ public class Squirrel
 
 	private String playerName;
 
-	public Squirrel(int id, int x, int y)
+	public Squirrel(int id, int x, int y, String username)
 	{
 		playerID = id;
 		loc = new Rectangle(x, y, 100, 100);
 		dir = Movement.STILL;
+		setName(username);
+	}
+
+	public Squirrel(int id, int x, int y)
+	{
+		this(id, x, y, "");
 	}
 
 	public void setLocation(int x, int y)
