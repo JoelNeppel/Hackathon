@@ -14,6 +14,8 @@ public class Squirrel
 
 	private Movement dir;
 
+	private String playerName;
+
 	public Squirrel(int id, int x, int y)
 	{
 		playerID = id;
@@ -89,6 +91,16 @@ public class Squirrel
 	public int getID()
 	{
 		return playerID;
+	}
+
+	public String getName()
+	{
+		return playerName;
+	}
+
+	public void setName(String name)
+	{
+		playerName = name;
 	}
 
 	public byte[] getBytes()
