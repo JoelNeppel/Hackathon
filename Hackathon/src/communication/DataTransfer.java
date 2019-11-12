@@ -22,7 +22,8 @@ public class DataTransfer
 		REMOVE_PLAYER('R'),
 		PLAYER_X('X'),
 		PLAYER_Y('Y'),
-		PLAYER_NUTS('H');
+		SET_PLAYER_NUTS('H'),
+		ADD_PLAYER_NUT('E');
 
 		private char toSend;
 
@@ -75,6 +76,17 @@ public class DataTransfer
 		squirrels.add(new Squirrel(id, x, y, username));
 	}
 
+	// Byte format [id1, id2]
+	public static void removePlayer(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	{
+		byte[] data = new byte[2];
+		in.read(data);
+
+		int id = ByteHelp.bytesToInt(data);
+
+		squirrels.remove(new Squirrel(id));
+	}
+
 	// Byte format [numPlayers, player1ID1, player1ID2, newLoc1, newLoc2, ...
 	// repeats for each remaining player]
 	public static void performYUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
@@ -94,6 +106,54 @@ public class DataTransfer
 
 			squirrels.get(new Squirrel(id, 0, 0)).setY(newY);
 		}
+	}
+
+	// Byte format [numPlayers, player1ID1, player1ID2, newLoc1, newLoc2, ...
+	// repeats for each remaining player]
+	public static void performXUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	{
+		int numElements = in.read();
+
+		byte[] data = new byte[2];
+		for(int i = 0; i < numElements; i++)
+		{
+			// Player ID
+			in.read(data);
+			int id = ByteHelp.bytesToInt(data);
+
+			// New player X
+			in.read(data);
+			int newX = ByteHelp.bytesToInt(data);
+
+			squirrels.get(new Squirrel(id)).setX(newX);
+		}
+	}
+
+	// Byte format [id1, id2, numNuts1, numNuts2]
+	public static void performNutSet(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	{
+		byte[] data = new byte[2];
+
+		// ID
+		in.read(data);
+		int id = ByteHelp.bytesToInt(data);
+
+		// Num nuts
+		in.read(data);
+		int numNuts = ByteHelp.bytesToInt(data);
+
+		squirrels.get(new Squirrel(id)).setNuts(numNuts);
+	}
+
+	// Byte format [id1, id2]
+	public static void performAddNut(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	{
+		byte[] data = new byte[2];
+
+		in.read(data);
+		int id = ByteHelp.bytesToInt(data);
+
+		squirrels.get(new Squirrel(id)).addNut();
 	}
 
 	public static void addNut(InputStream in, DoublyLinkedList<Nut> nuts) throws IOException

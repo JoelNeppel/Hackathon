@@ -29,6 +29,11 @@ public class Squirrel
 		this(id, x, y, "");
 	}
 
+	public Squirrel(int id)
+	{
+		this(id, 0, 0);
+	}
+
 	public void setLocation(int x, int y)
 	{
 		loc.setLocation(x, y);
