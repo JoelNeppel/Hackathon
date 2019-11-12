@@ -79,11 +79,12 @@ public class Paint extends JPanel implements WindowListener
 		JFrame frame = new JFrame();
 		Paint panel = new Paint();
 
-		frame.pack();
-		frame.setSize(1000, 1000);
+
 		frame.setVisible(true);
 		frame.addWindowListener(panel);
 		frame.setContentPane(panel);
+		frame.pack();
+		frame.setSize(1000, 1000);
 
 		panel.requestFocus();
 		panel.setBackground(Color.CYAN);
