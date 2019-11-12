@@ -54,10 +54,9 @@ public class DataTransfer
 	// repeats for each remaining player]
 	public static void performYUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
-		byte[] data = new byte[2];
-
 		int numElements = in.read();
 
+		byte[] data = new byte[2];
 		for(int i = 0; i < numElements; i++)
 		{
 			// Player ID
