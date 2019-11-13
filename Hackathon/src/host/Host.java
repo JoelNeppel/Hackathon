@@ -119,7 +119,6 @@ public class Host
 			long lastUpdate = 0;
 			while(true)
 			{
-				System.out.println("Performing round");
 				// Do player movements/updates
 				for(Client c : clients)
 				{
@@ -157,7 +156,6 @@ public class Host
 	 */
 	private static synchronized byte[] getBytes()
 	{
-		System.out.println("Converting to bytes");
 		return DataTransfer.sendFullUpdate(nuts, clients);
 	}
 
