@@ -54,10 +54,52 @@ public class DataTransfer
 		}
 	}
 
+	// Byte format [
 	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts,
-			DoublyLinkedList<Squirrel> squirrels)
+			DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
-		// TODO
+		byte[] bytes = new byte[4];
+		in.read(bytes);
+		int numSquirrels = ByteHelp.bytesToInt(bytes);
+		in.read(bytes);
+		int numNuts = ByteHelp.bytesToInt(bytes);
+		for(int i = 0; i < numSquirrels; i++)
+		{
+			in.read(bytes);
+			int id = ByteHelp.bytesToInt(bytes);
+			in.read(bytes);
+			int x = ByteHelp.bytesToInt(bytes);
+			in.read(bytes);
+			int y = ByteHelp.bytesToInt(bytes);
+			in.read(bytes);
+			int squirrelNuts = ByteHelp.bytesToInt(bytes);
+
+			boolean result = squirrels.contains(new Squirrel(id, 0, 0));
+			Squirrel s;
+			if(!result)
+			{
+				s = new Squirrel(id, x, y);
+				squirrels.add(s);
+			}
+			else
+			{
+				s = squirrels.get(new Squirrel(id));
+				s.setLocation(x, y);
+			}
+			s.setNuts(squirrelNuts);
+
+		}
+
+		nuts.clear();
+		for(int i = 0; i < numNuts; i++)
+		{
+			in.read(bytes);
+			int x = ByteHelp.bytesToInt(bytes);
+			in.read(bytes);
+			int y = ByteHelp.bytesToInt(bytes);
+
+			nuts.add(new Nut(x, y));
+		}
 	}
 
 	public static byte[] sendFullUpdate(DoublyLinkedList<Nut> nuts, DoublyLinkedList<Client> clients)

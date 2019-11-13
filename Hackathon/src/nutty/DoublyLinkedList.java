@@ -161,6 +161,13 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		return size;
 	}
 
+	public void clear()
+	{
+		head = null;
+		tail = null;
+		size = 0;
+	}
+
 	/**
 	 * Returns whether the list contains the given data.
 	 * @param data

@@ -155,6 +155,12 @@ public class SinglyLinkedList<E> implements Iterable<E>
 		return false;
 	}
 
+	public void clear()
+	{
+		head = null;
+		size = 0;
+	}
+
 	@Override
 	public Iterator<E> iterator()
 	{

@@ -25,9 +25,9 @@ public class Host
 	 */
 	private static DoublyLinkedList<Nut> nuts; // haha nuts
 
-	private static DoublyLinkedList<Nut> removed;
+	private static SinglyLinkedList<Nut> removed;
 
-	private static DoublyLinkedList<Nut> added;
+	private static SinglyLinkedList<Nut> added;
 
 	/**
 	 * The list of clients
@@ -47,8 +47,8 @@ public class Host
 	 */
 	public static void main(String[] args)
 	{
-		added = new DoublyLinkedList<>();
-		removed = new DoublyLinkedList<>();
+		added = new SinglyLinkedList<>();
+		removed = new SinglyLinkedList<>();
 		nuts = new DoublyLinkedList<Nut>()
 		{
 			@Override
@@ -88,13 +88,8 @@ public class Host
 			try
 			{
 				Socket client = server.accept();
-				boolean done = false;
-				while(!done)
-				{
-					client.setTcpNoDelay(true);
-					handleClient(client);
-					done = true;
-				}
+				client.setTcpNoDelay(true);
+				handleClient(client);
 			}
 			catch(IOException e)
 			{
@@ -124,6 +119,7 @@ public class Host
 			long lastUpdate = 0;
 			while(true)
 			{
+				System.out.println("Performing round");
 				// Do player movements/updates
 				for(Client c : clients)
 				{
@@ -161,17 +157,24 @@ public class Host
 	 */
 	private static synchronized byte[] getBytes()
 	{
+		System.out.println("Converting to bytes");
+		return DataTransfer.sendFullUpdate(nuts, clients);
+	}
+
+	{
 		SinglyLinkedList<byte[]> data = new SinglyLinkedList<>();
 
 		for(Nut n : added)
 		{
 			data.add(DataTransfer.sendNutAddition(n));
 		}
+		added.clear();
 
 		for(Nut n : removed)
 		{
 			data.add(DataTransfer.sendNutRemoval(n));
 		}
+		removed.clear();
 
 		SinglyLinkedList<Squirrel> xChange = new SinglyLinkedList<>();
 		SinglyLinkedList<Squirrel> yChange = new SinglyLinkedList<>();
@@ -191,6 +194,8 @@ public class Host
 			{
 				data.add(DataTransfer.sendSetPlayerNut(c.getSquirrel()));
 			}
+
+			c.resetChanges();
 		}
 
 		data.add(DataTransfer.sendXUpdates(yChange));
@@ -201,7 +206,7 @@ public class Host
 		{
 			totLen += b.length;
 		}
-
+		System.out.println("Total length: " + totLen);
 		byte[] send = new byte[totLen];
 		int at = 0;
 		for(byte[] bytes : data)
@@ -215,7 +220,7 @@ public class Host
 
 		send[send.length - 1] = (byte) DataTransfer.TransferType.DONE.getCharacterToSend();
 
-		return send;
+		// return send;
 	}
 
 	/**
@@ -226,6 +231,7 @@ public class Host
 	 */
 	private static synchronized void handleClient(Socket soc)
 	{
+		System.out.println("Handling client");
 		Squirrel squirrel = new Squirrel(playerNum, new Random().nextInt(900), 850);
 
 		byte[] send = DataTransfer.sendAddPlayer(squirrel);
@@ -259,6 +265,7 @@ public class Host
 					synchronized(Host.class)
 					{
 						nuts.add(new Nut(x, y));
+						System.out.println("Added new nut");
 					}
 				}
 

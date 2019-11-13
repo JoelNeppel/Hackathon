@@ -15,7 +15,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import communication.DataTransfer;
-import communication.DataTransfer.TransferType;
 import nutty.Constants;
 import nutty.DoublyLinkedList;
 import nutty.Nut;
@@ -27,7 +26,7 @@ import nutty.Tree;
 public class Paint extends JPanel implements WindowListener
 {
 
-	private static DoublyLinkedList<Squirrel> squirrels;
+	private static DoublyLinkedList<Squirrel> squirrels = new DoublyLinkedList<>();
 
 	private static DoublyLinkedList<Nut> nuts = new DoublyLinkedList<>();
 
@@ -169,93 +168,46 @@ public class Paint extends JPanel implements WindowListener
 			{
 				try
 				{
-					TransferType com = TransferType.charToTransfer((char) in.read());
+					DataTransfer.receiveFullUpdate(in, nuts, squirrels);
 
-					while(TransferType.DONE != com)
-					{
-						switch(com)
-						{
-							case FULL:
-								DataTransfer.receiveFullUpdate(in, nuts, squirrels);
-								break;
-							case ADD_NUT:
-								DataTransfer.receiveNutAddition(in, nuts);
-								break;
-							case ADD_PLAYER:
-								DataTransfer.receiveAddPlayer(in, squirrels);
-								break;
-							case ADD_PLAYER_NUT:
-								DataTransfer.performAddNut(in, squirrels);
-								break;
-							case PLAYER_X:
-								DataTransfer.performXUpdates(in, squirrels);
-								break;
-							case PLAYER_Y:
-								DataTransfer.performYUpdates(in, squirrels);
-								break;
-							case REMOVE_NUT:
-								DataTransfer.receiveNutRemoval(in, nuts);
-								break;
-							case REMOVE_PLAYER:
-								DataTransfer.receivePlayerRemoval(in, squirrels);
-								break;
-							case SET_PLAYER_NUTS:
-								DataTransfer.performNutSet(in, squirrels);
-								break;
-							default:
-								break;
-						}
-					}
+					// TransferType com = TransferType.charToTransfer((char) in.read());
 
-					// byte[] bytes = new byte[4];
-					// in.read(bytes);
-					// int numSquirrels = ByteHelp.bytesToInt(bytes);
-					// in.read(bytes);
-					// int numNuts = ByteHelp.bytesToInt(bytes);
-					// for(int i = 0; i < numSquirrels; i++)
+					// while(null != null && TransferType.DONE != com)
 					// {
-					// in.read(bytes);
-					// int id = ByteHelp.bytesToInt(bytes);
-					// in.read(bytes);
-					// int x = ByteHelp.bytesToInt(bytes);
-					// in.read(bytes);
-					// int y = ByteHelp.bytesToInt(bytes);
-					// in.read(bytes);
-					// int squirrelNuts = ByteHelp.bytesToInt(bytes);
-					//
-					// int result = squirrels.lastIndexOf(new Squirrel(id, 0, 0));
-					// Squirrel s;
-					// if(result == -1)
-					// {
-					// s = new Squirrel(id, x, y);
-					// squirrels.add(s);
-					// }
-					// else
-					// {
-					// s = squirrels.get(result);
-					// s.setLocation(x, y);
-					// }
-					// s.setNuts(squirrelNuts);
-					//
-					// }
-					//
-					// for(int i = 0; i < nuts.length; i++)
-					// {
-					// if(i < numNuts)
-					// {
-					// in.read(bytes);
-					// int x = ByteHelp.bytesToInt(bytes);
-					// in.read(bytes);
-					// int y = ByteHelp.bytesToInt(bytes);
-					//
-					// nuts[i] = new Nut(x, y);
-					// }
-					// else
-					// {
-					// nuts[i] = null;
-					// }
-					// }
 
+					// switch(com)
+					// {
+					// case FULL:
+					// DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+					// break;
+					// case ADD_NUT:
+					// DataTransfer.receiveNutAddition(in, nuts);
+					// break;
+					// case ADD_PLAYER:
+					// DataTransfer.receiveAddPlayer(in, squirrels);
+					// break;
+					// case ADD_PLAYER_NUT:
+					// DataTransfer.performAddNut(in, squirrels);
+					// break;
+					// case PLAYER_X:
+					// DataTransfer.performXUpdates(in, squirrels);
+					// break;
+					// case PLAYER_Y:
+					// DataTransfer.performYUpdates(in, squirrels);
+					// break;
+					// case REMOVE_NUT:
+					// DataTransfer.receiveNutRemoval(in, nuts);
+					// break;
+					// case REMOVE_PLAYER:
+					// DataTransfer.receivePlayerRemoval(in, squirrels);
+					// break;
+					// case SET_PLAYER_NUTS:
+					// DataTransfer.performNutSet(in, squirrels);
+					// break;
+					// default:
+					// break;
+					// }
+					// }
 				}
 				catch(IOException e)
 				{
