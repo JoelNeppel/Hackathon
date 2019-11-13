@@ -40,7 +40,7 @@ public class DataTransfer
 			return toSend;
 		}
 
-		public TransferType charToTransfer(char c)
+		public static TransferType charToTransfer(char c)
 		{
 			for(TransferType t : TransferType.values())
 			{
@@ -63,7 +63,7 @@ public class DataTransfer
 	public static byte[] sendFullUpdate(DoublyLinkedList<Nut> nuts, DoublyLinkedList<Client> clients)
 	{
 		int at = 0;
-		byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
+		byte[] data = new byte[9 + 16 * clients.size() + 8 * nuts.size()];
 		ByteHelp.toBytes(clients.size(), at, data);
 		at += 4;
 		ByteHelp.toBytes(nuts.size(), at, data);
@@ -87,6 +87,8 @@ public class DataTransfer
 			ByteHelp.toBytes(n.getY(), at, data);
 			at += 4;
 		}
+
+		data[data.length - 1] = (byte) TransferType.DONE.getCharacterToSend();
 
 		return data;
 	}

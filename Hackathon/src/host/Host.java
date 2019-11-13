@@ -196,7 +196,7 @@ public class Host
 		data.add(DataTransfer.sendXUpdates(yChange));
 		data.add(DataTransfer.sendYUpdates(yChange));
 
-		int totLen = 0;
+		int totLen = 1;
 		for(byte[] b : data)
 		{
 			totLen += b.length;
@@ -212,6 +212,8 @@ public class Host
 				at++;
 			}
 		}
+
+		send[send.length - 1] = (byte) DataTransfer.TransferType.DONE.getCharacterToSend();
 
 		return send;
 	}

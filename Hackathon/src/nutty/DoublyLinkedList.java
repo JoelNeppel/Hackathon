@@ -1,5 +1,6 @@
 package nutty;
 
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -247,6 +248,11 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		}
 
 		return null;
+	}
+
+	public void sort(Comparator<E> comp)
+	{
+
 	}
 
 	@SuppressWarnings("unused")
