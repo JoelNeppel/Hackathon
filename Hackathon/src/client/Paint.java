@@ -81,20 +81,16 @@ public class Paint extends JPanel implements WindowListener
 		Paint panel = new Paint();
 		JTextField username = new JTextField(25);
 		username = setupTextField(username);
-		
-		
-		panel.setLocation(0,0);
+
+		panel.setLocation(0, 0);
 		panel.setSize(1000, 1000);
 		panel.setBackground(Color.CYAN);
-
-
 
 		frame.setVisible(true);
 		frame.addWindowListener(panel);
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setSize(1000, 1000);
-		
 
 		panel.requestFocus();
 		Tree.setLoc(frame.getWidth(), frame.getHeight());
@@ -136,23 +132,23 @@ public class Paint extends JPanel implements WindowListener
 			n.drawNut(g);
 		}
 		scoreBoard(g);
-		//bottomMenu(g);
+		// bottomMenu(g);
 	}
 
 	private static JTextField setupTextField(JTextField text)
 	{
-		text.setLocation(25,5);
+		text.setLocation(25, 5);
 		text.setSize(250, 40);
-		
+
 		return text;
 	}
-	
+
 	private void bottomMenu(Graphics g)
 	{
-		g.setColor(new Color(0,0,0,127));
+		g.setColor(new Color(0, 0, 0, 127));
 		g.fillRect(0, 900, 450, 100);;
 	}
-	
+
 	private void scoreBoard(Graphics g)
 	{
 		g.setColor(new Color(0, 0, 0, 127));
@@ -194,6 +190,7 @@ public class Paint extends JPanel implements WindowListener
 				try
 				{
 					DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+					in.read();
 
 					// TransferType com = TransferType.charToTransfer((char) in.read());
 
