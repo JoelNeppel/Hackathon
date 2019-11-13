@@ -79,8 +79,16 @@ public class Paint extends JPanel implements WindowListener
 	{
 		JFrame frame = new JFrame();
 		Paint panel = new Paint();
+		JPanel menu = new JPanel();
 		JTextField username = new JTextField(25);
-		username = setupTextField(username);
+		
+		menu.setLocation(0, 900);
+		menu.setSize(450, 100);
+
+		username.setLocation(500,500);
+		username.setSize(250, 40);
+		menu.add(username);
+		panel.add(menu);
 
 		panel.setLocation(0, 0);
 		panel.setSize(1000, 1000);
@@ -94,6 +102,7 @@ public class Paint extends JPanel implements WindowListener
 
 		panel.requestFocus();
 		Tree.setLoc(frame.getWidth(), frame.getHeight());
+		
 	}
 
 	@Override
@@ -132,22 +141,15 @@ public class Paint extends JPanel implements WindowListener
 			n.drawNut(g);
 		}
 		scoreBoard(g);
-		// bottomMenu(g);
+		//bottomMenu(g);
 	}
 
-	private static JTextField setupTextField(JTextField text)
-	{
-		text.setLocation(25, 5);
-		text.setSize(250, 40);
-
-		return text;
-	}
-
-	private void bottomMenu(Graphics g)
+	/*private void bottomMenu(Graphics g)
 	{
 		g.setColor(new Color(0, 0, 0, 127));
 		g.fillRect(0, 900, 450, 100);;
 	}
+	*/
 
 	private void scoreBoard(Graphics g)
 	{
