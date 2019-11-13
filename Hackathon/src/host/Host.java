@@ -5,10 +5,11 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Random;
 
-import communication.ByteHelp;
+import communication.DataTransfer;
 import nutty.Constants;
 import nutty.DoublyLinkedList;
 import nutty.Nut;
+import nutty.SinglyLinkedList;
 import nutty.Squirrel;
 
 /**
@@ -23,6 +24,10 @@ public class Host
 	 * The list of nuts
 	 */
 	private static DoublyLinkedList<Nut> nuts; // haha nuts
+
+	private static DoublyLinkedList<Nut> removed;
+
+	private static DoublyLinkedList<Nut> added;
 
 	/**
 	 * The list of clients
@@ -42,7 +47,24 @@ public class Host
 	 */
 	public static void main(String[] args)
 	{
-		nuts = new DoublyLinkedList<>();
+		added = new DoublyLinkedList<>();
+		removed = new DoublyLinkedList<>();
+		nuts = new DoublyLinkedList<Nut>()
+		{
+			@Override
+			public void add(Nut n)
+			{
+				super.add(n);
+				added.add(n);
+			}
+
+			@Override
+			public void remove(Nut n)
+			{
+				super.remove(n);
+				removed.add(n);
+			}
+		};
 		clients = new DoublyLinkedList<>();
 
 		ServerSocket server = null;
@@ -139,34 +161,59 @@ public class Host
 	 */
 	private static synchronized byte[] getBytes()
 	{
-		int at = 0;
-		byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
-		ByteHelp.toBytes(clients.size(), at, data);
-		at += 4;
-		ByteHelp.toBytes(nuts.size(), at, data);
-		at += 4;
+		SinglyLinkedList<byte[]> data = new SinglyLinkedList<>();
+
+		for(Nut n : added)
+		{
+			data.add(DataTransfer.sendNutAddition(n));
+		}
+
+		for(Nut n : removed)
+		{
+			data.add(DataTransfer.sendNutRemoval(n));
+		}
+
+		SinglyLinkedList<Squirrel> xChange = new SinglyLinkedList<>();
+		SinglyLinkedList<Squirrel> yChange = new SinglyLinkedList<>();
 
 		for(Client c : clients)
 		{
-			Squirrel s = c.getSquirrel();
-			byte[] sData = s.getBytes();
-			for(int i = 0; i < 16; i++)
+			if(c.xChanged())
 			{
-				data[at] = sData[i];
+				xChange.add(c.getSquirrel());
+			}
+			if(c.yChanged())
+			{
+				yChange.add(c.getSquirrel());
+			}
+
+			if(c.nutsChanged())
+			{
+				data.add(DataTransfer.sendSetPlayerNut(c.getSquirrel()));
+			}
+		}
+
+		data.add(DataTransfer.sendXUpdates(yChange));
+		data.add(DataTransfer.sendYUpdates(yChange));
+
+		int totLen = 0;
+		for(byte[] b : data)
+		{
+			totLen += b.length;
+		}
+
+		byte[] send = new byte[totLen];
+		int at = 0;
+		for(byte[] bytes : data)
+		{
+			for(byte b : bytes)
+			{
+				send[at] = b;
 				at++;
 			}
 		}
 
-		for(Nut n : nuts)
-		{
-			ByteHelp.toBytes(n.getX(), at, data);
-			at += 4;
-			ByteHelp.toBytes(n.getY(), at, data);
-			at += 4;
-		}
-
-		return data;
-
+		return send;
 	}
 
 	/**
@@ -178,8 +225,16 @@ public class Host
 	private static synchronized void handleClient(Socket soc)
 	{
 		Squirrel squirrel = new Squirrel(playerNum, new Random().nextInt(900), 850);
+
+		byte[] send = DataTransfer.sendAddPlayer(squirrel);
+		for(Client c : clients)
+		{
+			c.write(send);
+		}
+
 		Client newC = new Client(soc, squirrel);
 		clients.add(newC);
+		newC.write(DataTransfer.sendFullUpdate(nuts, clients));
 		playerNum++;
 	}
 
@@ -194,7 +249,7 @@ public class Host
 			Random rand = new Random();
 			while(true)
 			{
-				if(nuts.size() < 30)
+				if(nuts.size() < Constants.NUT_GENERATION_LIMIT)
 				{
 					int x = rand.nextInt(1000);
 					int y = rand.nextInt(1000);
@@ -225,5 +280,11 @@ public class Host
 	public static synchronized void removeClient(Client c)
 	{
 		clients.remove(c);
+
+		byte[] send = DataTransfer.sendPlayerRemoval(c.getSquirrel());
+		for(Client client : clients)
+		{
+			client.write(send);
+		}
 	}
 }

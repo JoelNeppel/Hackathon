@@ -28,7 +28,7 @@ public class Paint extends JPanel implements WindowListener
 
 	private static ArrayList<Squirrel> squirrels;
 
-	private static Nut[] nuts = new Nut[100];
+	private static Nut[] nuts = new Nut[Constants.NUT_GENERATION_LIMIT];
 
 	private static BufferedImage FirstPlace = null;
 
@@ -78,7 +78,6 @@ public class Paint extends JPanel implements WindowListener
 	{
 		JFrame frame = new JFrame();
 		Paint panel = new Paint();
-
 
 		frame.setVisible(true);
 		frame.addWindowListener(panel);
@@ -233,16 +232,6 @@ public class Paint extends JPanel implements WindowListener
 	}
 
 	@Override
-	public void windowActivated(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e)
-	{
-	}
-
-	@Override
 	public void windowClosing(WindowEvent e)
 	{
 		try
@@ -253,6 +242,16 @@ public class Paint extends JPanel implements WindowListener
 		{
 		}
 		System.exit(0);
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e)
+	{
 	}
 
 	@Override

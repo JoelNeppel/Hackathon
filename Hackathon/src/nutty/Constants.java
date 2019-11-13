@@ -13,4 +13,6 @@ public class Constants
 	public static final String SQUIRREL_SECOND_PATH = "squirrelSecond.png";
 
 	public static final String SQUIRREL_FIRST_PATH = "squirrelFirst.png";
+
+	public static final int NUT_GENERATION_LIMIT = 30;
 }

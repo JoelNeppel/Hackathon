@@ -3,8 +3,10 @@ package communication;
 import java.io.IOException;
 import java.io.InputStream;
 
+import host.Client;
 import nutty.DoublyLinkedList;
 import nutty.Nut;
+import nutty.SinglyLinkedList;
 import nutty.Squirrel;
 
 /**
@@ -23,7 +25,8 @@ public class DataTransfer
 		PLAYER_X('X'),
 		PLAYER_Y('Y'),
 		SET_PLAYER_NUTS('H'),
-		ADD_PLAYER_NUT('E');
+		ADD_PLAYER_NUT('E'),
+		DONE('D');
 
 		private char toSend;
 
@@ -51,8 +54,107 @@ public class DataTransfer
 		}
 	}
 
+	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts,
+			DoublyLinkedList<Squirrel> squirrels)
+	{
+		// TODO
+	}
+
+	public static byte[] sendFullUpdate(DoublyLinkedList<Nut> nuts, DoublyLinkedList<Client> clients)
+	{
+		int at = 0;
+		byte[] data = new byte[8 + 16 * clients.size() + 8 * nuts.size()];
+		ByteHelp.toBytes(clients.size(), at, data);
+		at += 4;
+		ByteHelp.toBytes(nuts.size(), at, data);
+		at += 4;
+
+		for(Client c : clients)
+		{
+			Squirrel s = c.getSquirrel();
+			byte[] sData = s.getBytes();
+			for(int i = 0; i < 16; i++)
+			{
+				data[at] = sData[i];
+				at++;
+			}
+		}
+
+		for(Nut n : nuts)
+		{
+			ByteHelp.toBytes(n.getX(), at, data);
+			at += 4;
+			ByteHelp.toBytes(n.getY(), at, data);
+			at += 4;
+		}
+
+		return data;
+	}
+
+	public static void receiveNutAddition(InputStream in, DoublyLinkedList<Nut> nuts) throws IOException
+	{
+		receiveNutAction(in, nuts::add);
+	}
+
+	public static byte[] sendNutAddition(Nut add)
+	{
+		byte[] data = new byte[5];
+
+		data[0] = (byte) TransferType.ADD_NUT.getCharacterToSend();
+		nutToBytes(data, add);
+
+		return data;
+	}
+
+	public static void receiveNutRemoval(InputStream in, DoublyLinkedList<Nut> nuts) throws IOException
+	{
+		receiveNutAction(in, nuts::remove);
+	}
+
+	public static byte[] sendNutRemoval(Nut add)
+	{
+		byte[] data = new byte[5];
+
+		data[0] = (byte) TransferType.REMOVE_NUT.getCharacterToSend();
+		nutToBytes(data, add);
+
+		return data;
+	}
+
+	// Byte format [x1, x2, y1, y2]
+	private static void receiveNutAction(InputStream in, Action a) throws IOException
+	{
+		byte[] data = new byte[2];
+
+		// X location
+		in.read(data);
+		int x = ByteHelp.bytesToInt(data);
+
+		// Y location
+		in.read(data);
+		int y = ByteHelp.bytesToInt(data);
+
+		a.nutAction(new Nut(x, y));
+	}
+
+	private interface Action
+	{
+		void nutAction(Nut n);
+	}
+
+	private static void nutToBytes(byte[] put, Nut n)
+	{
+		byte[] data = ByteHelp.toBytes(n.getX());
+		put[1] = data[2];
+		put[2] = data[3];
+
+		data = ByteHelp.toBytes(n.getY());
+		put[3] = data[2];
+		put[4] = data[3];
+	}
+
 	// Byte format [id1, id2, x1, x2, y1, y2, usernameLength, player name]
-	public static void addPlayer(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	public static void receiveAddPlayer(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] data = new byte[2];
 
@@ -73,11 +175,51 @@ public class DataTransfer
 		in.read(data);
 		String username = new String(data);
 
-		squirrels.add(new Squirrel(id, x, y, username));
+		Squirrel s = new Squirrel(id, x, y, username);
+
+		if(!squirrels.contains(s))
+		{
+			squirrels.add(s);
+		}
+	}
+
+	public static byte[] sendAddPlayer(Squirrel s)
+	{
+		byte[] data = new byte[8 + s.getName().length()];
+
+		data[0] = (byte) TransferType.ADD_PLAYER.getCharacterToSend();
+
+		// ID
+		byte[] bytes = ByteHelp.toBytes(s.getID());
+		data[1] = bytes[2];
+		data[2] = bytes[3];
+
+		// x location
+		bytes = ByteHelp.toBytes(s.getX());
+		data[3] = bytes[2];
+		data[4] = bytes[3];
+
+		// y location
+		bytes = ByteHelp.toBytes(s.getY());
+		data[5] = bytes[2];
+		data[6] = bytes[3];
+
+		// User name
+		bytes = ByteHelp.toBytes(s.getName().length());
+		data[7] = bytes[3];
+		int at = 8;
+		bytes = s.getName().getBytes();
+		for(byte b : s.getName().getBytes())
+		{
+			data[at] = b;
+			at++;
+		}
+
+		return data;
 	}
 
 	// Byte format [id1, id2]
-	public static void removePlayer(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	public static void receivePlayerRemoval(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] data = new byte[2];
 		in.read(data);
@@ -87,25 +229,16 @@ public class DataTransfer
 		squirrels.remove(new Squirrel(id));
 	}
 
-	// Byte format [numPlayers, player1ID1, player1ID2, newLoc1, newLoc2, ...
-	// repeats for each remaining player]
-	public static void performYUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	public static byte[] sendPlayerRemoval(Squirrel s)
 	{
-		int numElements = in.read();
+		byte[] data = new byte[3];
 
-		byte[] data = new byte[2];
-		for(int i = 0; i < numElements; i++)
-		{
-			// Player ID
-			in.read(data);
-			int id = ByteHelp.bytesToInt(data);
+		data[0] = (byte) TransferType.REMOVE_PLAYER.getCharacterToSend();
+		byte[] id = ByteHelp.toBytes(s.getID());
+		data[1] = id[2];
+		data[2] = id[3];
 
-			// New player Y
-			in.read(data);
-			int newY = ByteHelp.bytesToInt(data);
-
-			squirrels.get(new Squirrel(id, 0, 0)).setY(newY);
-		}
+		return data;
 	}
 
 	// Byte format [numPlayers, player1ID1, player1ID2, newLoc1, newLoc2, ...
@@ -129,6 +262,83 @@ public class DataTransfer
 		}
 	}
 
+	public static byte[] sendXUpdates(SinglyLinkedList<Squirrel> squirrels)
+	{
+		byte[] data = new byte[2 + 4 * squirrels.size()];
+
+		data[0] = (byte) TransferType.PLAYER_X.getCharacterToSend();
+		data[1] = ByteHelp.toBytes(squirrels.size())[3];
+
+		int at = 2;
+		for(Squirrel s : squirrels)
+		{
+			// Player ID
+			byte[] bytes = ByteHelp.toBytes(s.getID());
+			data[at] = bytes[2];
+			at++;
+			data[at] = bytes[3];
+			at++;
+
+			// New x
+			bytes = ByteHelp.toBytes(s.getX());
+			data[at] = bytes[2];
+			at++;
+			data[at] = bytes[3];
+			at++;
+		}
+
+		return data;
+	}
+
+	// Byte format [numPlayers, player1ID1, player1ID2, newLoc1, newLoc2, ...
+	// repeats for each remaining player]
+	public static void performYUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
+	{
+		int numElements = in.read();
+
+		byte[] data = new byte[2];
+		for(int i = 0; i < numElements; i++)
+		{
+			// Player ID
+			in.read(data);
+			int id = ByteHelp.bytesToInt(data);
+
+			// New player Y
+			in.read(data);
+			int newY = ByteHelp.bytesToInt(data);
+
+			squirrels.get(new Squirrel(id, 0, 0)).setY(newY);
+		}
+	}
+
+	public static byte[] sendYUpdates(SinglyLinkedList<Squirrel> squirrels)
+	{
+		byte[] data = new byte[2 + 4 * squirrels.size()];
+
+		data[0] = (byte) TransferType.PLAYER_X.getCharacterToSend();
+		data[1] = ByteHelp.toBytes(squirrels.size())[3];
+
+		int at = 2;
+		for(Squirrel s : squirrels)
+		{
+			// Player ID
+			byte[] bytes = ByteHelp.toBytes(s.getID());
+			data[at] = bytes[2];
+			at++;
+			data[at] = bytes[3];
+			at++;
+
+			// New y
+			bytes = ByteHelp.toBytes(s.getY());
+			data[at] = bytes[2];
+			at++;
+			data[at] = bytes[3];
+			at++;
+		}
+
+		return data;
+	}
+
 	// Byte format [id1, id2, numNuts1, numNuts2]
 	public static void performNutSet(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
@@ -145,6 +355,25 @@ public class DataTransfer
 		squirrels.get(new Squirrel(id)).setNuts(numNuts);
 	}
 
+	public static byte[] sendSetPlayerNut(Squirrel s)
+	{
+		byte[] data = new byte[5];
+
+		data[0] = (byte) TransferType.SET_PLAYER_NUTS.getCharacterToSend();
+
+		// Player ID
+		byte[] bytes = ByteHelp.toBytes(s.getID());
+		data[1] = bytes[2];
+		data[2] = bytes[3];
+
+		// New nuts
+		bytes = ByteHelp.toBytes(s.getNumNuts());
+		data[3] = bytes[2];
+		data[4] = bytes[3];
+
+		return data;
+	}
+
 	// Byte format [id1, id2]
 	public static void performAddNut(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
@@ -156,34 +385,15 @@ public class DataTransfer
 		squirrels.get(new Squirrel(id)).addNut();
 	}
 
-	public static void addNut(InputStream in, DoublyLinkedList<Nut> nuts) throws IOException
+	public static byte[] sendPlayerAddNut(Squirrel s)
 	{
-		doNutAction(in, nuts::add);
-	}
+		byte[] data = new byte[3];
 
-	public static void removeNut(InputStream in, DoublyLinkedList<Nut> nuts) throws IOException
-	{
-		doNutAction(in, nuts::remove);
-	}
+		data[0] = (byte) TransferType.ADD_PLAYER_NUT.getCharacterToSend();
+		byte[] id = ByteHelp.toBytes(s.getID());
+		data[1] = id[2];
+		data[2] = id[3];
 
-	// Byte format [x1, x2, y1, y2]
-	private static void doNutAction(InputStream in, Action a) throws IOException
-	{
-		byte[] data = new byte[2];
-
-		// X location
-		in.read(data);
-		int x = ByteHelp.bytesToInt(data);
-
-		// Y location
-		in.read(data);
-		int y = ByteHelp.bytesToInt(data);
-
-		a.nutAction(new Nut(x, y));
-	}
-
-	private interface Action
-	{
-		void nutAction(Nut n);
+		return data;
 	}
 }
