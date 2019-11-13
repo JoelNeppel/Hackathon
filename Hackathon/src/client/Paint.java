@@ -13,6 +13,7 @@ import java.net.Socket;
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import communication.DataTransfer;
 import nutty.Constants;
@@ -78,12 +79,16 @@ public class Paint extends JPanel implements WindowListener
 	{
 		JFrame frame = new JFrame();
 		Paint panel = new Paint();
+		JTextField username = new JTextField(25);
+		setupTextField(username);
+		
 
 		frame.setVisible(true);
 		frame.addWindowListener(panel);
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setSize(1000, 1000);
+		panel.add(username);
 
 		panel.requestFocus();
 		panel.setBackground(Color.CYAN);
@@ -126,8 +131,22 @@ public class Paint extends JPanel implements WindowListener
 			n.drawNut(g);
 		}
 		scoreBoard(g);
+		bottomMenu(g);
 	}
 
+	private static void setupTextField(JTextField text)
+	{
+		text.setLocation(25,5);
+		text.setSize(250, 40);
+		
+	}
+	
+	private void bottomMenu(Graphics g)
+	{
+		g.setColor(new Color(0,0,0,127));
+		g.fillRect(0, 900, 450, 100);;
+	}
+	
 	private void scoreBoard(Graphics g)
 	{
 		g.setColor(new Color(0, 0, 0, 127));
