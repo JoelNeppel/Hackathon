@@ -84,11 +84,12 @@ public class Paint extends JPanel implements WindowListener
 		
 		menu.setLocation(0, 900);
 		menu.setSize(450, 100);
+		panel.add(menu);
 
-		username.setLocation(500,500);
+		username.setLocation(25,5);
 		username.setSize(250, 40);
 		menu.add(username);
-		panel.add(menu);
+		
 
 		panel.setLocation(0, 0);
 		panel.setSize(1000, 1000);
