@@ -78,7 +78,7 @@ public class Paint extends JPanel implements WindowListener
 
 	public static void main(String[] args)
 	{
-		JFrame frame = new JFrame();
+		JFrame frame = new JFrame("Nutty.io");
 		Paint panel = new Paint();
 		JPanel menu = new JPanel();
 		JTextField username = new JTextField(25);
