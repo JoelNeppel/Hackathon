@@ -183,7 +183,10 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 				return;
 			}
 			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-			g.drawString((i + 1) + ": " + squirrels.get(i).getID() + " - " + squirrels.get(i).getNumNuts(), 810,
+			if (squirrels.get(i).getName() == "") {
+				squirrels.get(i).setName("" + squirrels.get(i).getID());
+			}
+			g.drawString((i + 1) + ": " + squirrels.get(i).getName() + " - " + squirrels.get(i).getNumNuts(), 810,
 					25 + (20 * i));
 
 		}
