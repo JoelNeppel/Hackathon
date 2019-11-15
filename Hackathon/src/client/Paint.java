@@ -194,6 +194,7 @@ public class Paint extends JPanel implements WindowListener
 			while(!Thread.interrupted())
 			{
 				System.out.println("Receiving");
+
 				try
 				{
 					in.read();
