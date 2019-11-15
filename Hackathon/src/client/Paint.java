@@ -118,7 +118,7 @@ public class Paint extends JPanel implements WindowListener
 		Tree.draw(g);
 
 		System.out.println("Compare");
-		squirrels.sort(compare);
+		// squirrels.sort(compare);
 
 		for(int i = 0; i < squirrels.size(); ++i)
 		{

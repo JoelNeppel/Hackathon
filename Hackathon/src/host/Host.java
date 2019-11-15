@@ -158,6 +158,10 @@ public class Host
 	 */
 	private static synchronized byte[] getBytes()
 	{
+		return DataTransfer.sendFullUpdate(nuts, clients);
+	}
+
+	{
 		SinglyLinkedList<byte[]> data = new SinglyLinkedList<>();
 
 		for(Nut n : added)
@@ -222,7 +226,7 @@ public class Host
 
 		send[send.length - 1] = (byte) DataTransfer.TransferType.DONE.getCharacterToSend();
 
-		return send;
+		// return send;
 	}
 
 	/**
