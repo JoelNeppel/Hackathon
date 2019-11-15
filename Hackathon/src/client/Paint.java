@@ -5,12 +5,15 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
 
 import javax.imageio.ImageIO;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -24,7 +27,7 @@ import nutty.SquirrelNutComparator;
 import nutty.Tree;
 
 @SuppressWarnings("serial")
-public class Paint extends JPanel implements WindowListener
+public class Paint extends JPanel implements WindowListener, ActionListener
 {
 
 	private static DoublyLinkedList<Squirrel> squirrels = new DoublyLinkedList<>();
@@ -42,6 +45,8 @@ public class Paint extends JPanel implements WindowListener
 	private static SquirrelNutComparator compare = new SquirrelNutComparator();
 
 	private Socket client;
+
+	static Paint panel;
 
 	public Paint()
 	{
@@ -81,14 +86,26 @@ public class Paint extends JPanel implements WindowListener
 		Paint panel = new Paint();
 		JPanel menu = new JPanel();
 		JTextField username = new JTextField(25);
+		JButton enterButton = new JButton("Enter");
 
-		menu.setLocation(0, 900);
-		menu.setSize(450, 100);
+		panel.setLayout(null);
+
+		menu.setLayout(null);
+		menu.setLocation(0, 0);
+		menu.setSize(450, 60);
+		menu.setBackground(new Color(0,0,0,127));
+		
 		panel.add(menu);
 
-		username.setLocation(25, 5);
+		username.setLocation(15, 5);
 		username.setSize(250, 40);
 		menu.add(username);
+
+		enterButton.setActionCommand("buttonPressed");
+		enterButton.addActionListener(panel);
+		enterButton.setLocation(280, 10);
+		enterButton.setSize(100,30);
+		menu.add(enterButton);
 
 		panel.setLocation(0, 0);
 		panel.setSize(1000, 1000);
@@ -101,6 +118,8 @@ public class Paint extends JPanel implements WindowListener
 		frame.setSize(1000, 1000);
 
 		panel.requestFocus();
+		panel.revalidate();
+		panel.repaint();
 		Tree.setLoc(frame.getWidth(), frame.getHeight());
 
 	}
@@ -291,5 +310,11 @@ public class Paint extends JPanel implements WindowListener
 	@Override
 	public void windowOpened(WindowEvent e)
 	{
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e)
+	{
+		panel.requestFocus();
 	}
 }
