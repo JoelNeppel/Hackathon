@@ -16,7 +16,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import communication.DataTransfer;
-import communication.DataTransfer.TransferType;
 import nutty.Constants;
 import nutty.DoublyLinkedList;
 import nutty.Nut;
@@ -197,46 +196,49 @@ public class Paint extends JPanel implements WindowListener
 				System.out.println("Receiving");
 				try
 				{
-					int got = in.read();
-					System.out.println("Got:: " + got);
-					System.out.println("Got: " + (char) got);
-					TransferType com = TransferType.charToTransfer((char) got);
-					System.out.println(com);
-					while(null != com && TransferType.DONE != com)
-					{
-						switch(com)
-						{
-							case FULL:
-								DataTransfer.receiveFullUpdate(in, nuts, squirrels);
-								break;
-							case ADD_NUT:
-								DataTransfer.receiveNutAddition(in, nuts);
-								break;
-							case ADD_PLAYER:
-								DataTransfer.receiveAddPlayer(in, squirrels);
-								break;
-							case ADD_PLAYER_NUT:
-								DataTransfer.performAddNut(in, squirrels);
-								break;
-							case PLAYER_X:
-								DataTransfer.performXUpdates(in, squirrels);
-								break;
-							case PLAYER_Y:
-								DataTransfer.performYUpdates(in, squirrels);
-								break;
-							case REMOVE_NUT:
-								DataTransfer.receiveNutRemoval(in, nuts);
-								break;
-							case REMOVE_PLAYER:
-								DataTransfer.receivePlayerRemoval(in, squirrels);
-								break;
-							case SET_PLAYER_NUTS:
-								DataTransfer.performNutSet(in, squirrels);
-								break;
-							default:
-								break;
-						}
-					}
+					in.read();
+					DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+					in.read();
+					// int got = in.read();
+					// System.out.println("Got:: " + got);
+					// System.out.println("Got: " + (char) got);
+					// TransferType com = TransferType.charToTransfer((char) got);
+					// System.out.println(com);
+					// while(null != com && TransferType.DONE != com)
+					// {
+					// switch(com)
+					// {
+					// case FULL:
+					// DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+					// break;
+					// case ADD_NUT:
+					// DataTransfer.receiveNutAddition(in, nuts);
+					// break;
+					// case ADD_PLAYER:
+					// DataTransfer.receiveAddPlayer(in, squirrels);
+					// break;
+					// case ADD_PLAYER_NUT:
+					// DataTransfer.performAddNut(in, squirrels);
+					// break;
+					// case PLAYER_X:
+					// DataTransfer.performXUpdates(in, squirrels);
+					// break;
+					// case PLAYER_Y:
+					// DataTransfer.performYUpdates(in, squirrels);
+					// break;
+					// case REMOVE_NUT:
+					// DataTransfer.receiveNutRemoval(in, nuts);
+					// break;
+					// case REMOVE_PLAYER:
+					// DataTransfer.receivePlayerRemoval(in, squirrels);
+					// break;
+					// case SET_PLAYER_NUTS:
+					// DataTransfer.performNutSet(in, squirrels);
+					// break;
+					// default:
+					// break;
+					// }
+					// }
 				}
 				catch(IOException e)
 				{

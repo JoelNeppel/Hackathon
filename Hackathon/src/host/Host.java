@@ -243,14 +243,14 @@ public class Host
 		byte[] send = DataTransfer.sendAddPlayer(squirrel);
 		for(Client c : clients)
 		{
-			c.write(send);
+			// c.write(send);
 		}
 
 		Client newC = new Client(soc, squirrel);
 		clients.add(newC);
 		send = DataTransfer.sendFullUpdate(nuts, clients);
 		System.out.println(Arrays.toString(send));
-		newC.write(send);
+		// newC.write(send);
 		playerNum++;
 	}
 
