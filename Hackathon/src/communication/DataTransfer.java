@@ -61,6 +61,7 @@ public class DataTransfer
 		byte[] bytes = new byte[4];
 		in.read(bytes);
 		int numSquirrels = ByteHelp.bytesToInt(bytes);
+		System.out.println("Squirrels: " + numSquirrels);
 		in.read(bytes);
 		int numNuts = ByteHelp.bytesToInt(bytes);
 		for(int i = 0; i < numSquirrels; i++)
@@ -104,8 +105,9 @@ public class DataTransfer
 
 	public static byte[] sendFullUpdate(DoublyLinkedList<Nut> nuts, DoublyLinkedList<Client> clients)
 	{
-		int at = 0;
-		byte[] data = new byte[9 + 16 * clients.size() + 8 * nuts.size()];
+		int at = 1;
+		byte[] data = new byte[10 + 16 * clients.size() + 8 * nuts.size()];
+		data[0] = (byte) TransferType.FULL.getCharacterToSend();
 		ByteHelp.toBytes(clients.size(), at, data);
 		at += 4;
 		ByteHelp.toBytes(nuts.size(), at, data);

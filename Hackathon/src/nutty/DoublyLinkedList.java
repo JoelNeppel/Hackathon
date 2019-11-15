@@ -259,19 +259,50 @@ public class DoublyLinkedList<E> implements Iterable<E>
 
 	public void sort(Comparator<E> comp)
 	{
+		for(int i = 0; i < size - 1; i++)
+		{
+			DoublyLinkedIterator iter = new DoublyLinkedIterator();
+			for(int j = 0; j < i; j++)
+			{
+				iter.next();
+			}
+			Node swap = iter.next;
 
+			Node small = iter.next;
+			while(iter.hasNext())
+			{
+				E o = iter.next();
+
+				int result = comp.compare(small.data, o);
+				if(result > 0)
+				{
+					small = iter.pending;
+				}
+			}
+
+			swap(swap, small);
+		}
 	}
 
-	@SuppressWarnings("unused")
 	private void swap(Node n1, Node n2)
 	{
-		System.out.println("swapped");
-		Node swapped = n1.previous;
-		n1.previous = n2.previous;
-		n2.previous = swapped;
-		swapped = n1.next;
+		if(n1 == n2)
+		{
+			return;
+		}
+		if(n1 == head)
+		{
+			head = n2;
+		}
+		if(n2 == tail)
+		{
+			tail = n1;
+		}
+
+		n2.previous = n1.previous;
 		n1.next = n2.next;
-		n2.next = swapped;
+		n1.previous = n2;
+		n2.next = n1;
 	}
 
 	@Override

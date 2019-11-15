@@ -3,6 +3,7 @@ package host;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Random;
 
 import communication.DataTransfer;
@@ -130,6 +131,7 @@ public class Host
 				// Send bytes to each client
 				for(Client c : clients)
 				{
+					System.out.println("Writing to clients");
 					c.write(data);
 				}
 
@@ -155,10 +157,6 @@ public class Host
 	 * @return The bytes to send
 	 */
 	private static synchronized byte[] getBytes()
-	{
-		return DataTransfer.sendFullUpdate(nuts, clients);
-	}
-
 	{
 		SinglyLinkedList<byte[]> data = new SinglyLinkedList<>();
 
@@ -196,8 +194,14 @@ public class Host
 			c.resetChanges();
 		}
 
-		data.add(DataTransfer.sendXUpdates(yChange));
-		data.add(DataTransfer.sendYUpdates(yChange));
+		if(!xChange.isEmpty())
+		{
+			data.add(DataTransfer.sendXUpdates(xChange));
+		}
+		if(!yChange.isEmpty())
+		{
+			data.add(DataTransfer.sendYUpdates(yChange));
+		}
 
 		int totLen = 1;
 		for(byte[] b : data)
@@ -218,7 +222,7 @@ public class Host
 
 		send[send.length - 1] = (byte) DataTransfer.TransferType.DONE.getCharacterToSend();
 
-		// return send;
+		return send;
 	}
 
 	/**
@@ -240,7 +244,9 @@ public class Host
 
 		Client newC = new Client(soc, squirrel);
 		clients.add(newC);
-		newC.write(DataTransfer.sendFullUpdate(nuts, clients));
+		send = DataTransfer.sendFullUpdate(nuts, clients);
+		System.out.println(Arrays.toString(send));
+		newC.write(send);
 		playerNum++;
 	}
 
