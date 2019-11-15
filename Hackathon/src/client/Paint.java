@@ -47,6 +47,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	private Socket client;
 
 	static Paint panel;
+	
+	static JTextField username;
 
 	public Paint()
 	{
@@ -127,7 +129,6 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	@Override
 	public synchronized void paint(Graphics g)
 	{
-		System.out.println("Painting");
 		super.paint(g);
 
 		g.setColor(Color.GREEN);
@@ -135,7 +136,6 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 		Tree.draw(g);
 
-		System.out.println("Compare");
 		// squirrels.sort(compare);
 
 		for(int i = 0; i < squirrels.size(); ++i)
@@ -157,15 +157,12 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 				g.drawImage(BasicImage, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
 			}
 		}
-		System.out.println("nuts");
 		for(Nut n : nuts)
 		{
 			n.drawNut(g);
 		}
 
-		System.out.println("Scoreboard");
 		scoreBoard(g);
-		System.out.println("Done paint");
 		// bottomMenu(g);
 	}
 
@@ -212,7 +209,6 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 			while(!Thread.interrupted())
 			{
-				System.out.println("Receiving");
 				try
 				{
 					in.read();
@@ -315,6 +311,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		panel.requestFocus();
+		if (e.getActionCommand().equals("buttonPressed")) {
+			String name = username.getText();
+		}
 	}
 }
