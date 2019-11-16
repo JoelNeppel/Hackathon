@@ -88,7 +88,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		JFrame frame = new JFrame("Nutty.io");
 		Paint panel = new Paint();
 		JPanel menu = new JPanel();
-		JTextField username = new JTextField(25);
+		username = new JTextField(25);
 		JButton enterButton = new JButton("Enter");
 
 		panel.setLayout(null);
@@ -137,7 +137,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 		Tree.draw(g);
 
-		// squirrels.sort(compare);
+		squirrels.sort(compare);
 
 		for(int i = 0; i < squirrels.size(); ++i)
 		{
@@ -318,6 +318,11 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	{
 		if(e.getActionCommand().equals("buttonPressed"))
 		{
+			if(null == username.getText())
+			{
+				return;
+			}
+
 			byte[] name = username.getText().getBytes();
 
 			try
@@ -325,7 +330,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 				OutputStream out = client.getOutputStream();
 				byte[] send = new byte[2 + Math.min(name.length, 10)];
 				send[0] = (byte) 'N';
-
+				send[1] = (byte) Math.min(name.length, 10);
 				for(int i = 2; i < send.length; i++)
 				{
 					send[i] = name[i - 2];
