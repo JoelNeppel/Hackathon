@@ -50,6 +50,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	
 	static JTextField username;
 
+	static JButton enterButton;
+
 	public Paint()
 	{
 		super();
@@ -87,8 +89,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		JFrame frame = new JFrame("Nutty.io");
 		Paint panel = new Paint();
 		JPanel menu = new JPanel();
-		JTextField username = new JTextField(25);
-		JButton enterButton = new JButton("Enter");
+		username = new JTextField(25);
+		enterButton = new JButton("Enter");
 
 		panel.setLayout(null);
 
@@ -316,6 +318,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	{
 		if (e.getActionCommand().equals("buttonPressed")) {
 			String name = username.getText();
+		
 		}
 	}
 }
