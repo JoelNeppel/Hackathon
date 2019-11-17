@@ -211,9 +211,13 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			{
 				try
 				{
-					in.read();
+					char got = (char) in.read();
+					if(got != 'F')
+						System.out.println("Bad juju " + got);
 					DataTransfer.receiveFullUpdate(in, nuts, squirrels);
-					in.read();
+					got = (char) in.read();
+					if(got != 'D')
+						System.out.println("Bad juju " + got);
 					// int got = in.read();
 					// System.out.println("Got:: " + got);
 					// System.out.println("Got: " + (char) got);

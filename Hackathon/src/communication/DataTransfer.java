@@ -58,22 +58,32 @@ public class DataTransfer
 	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] bytes = new byte[4];
-		in.read(bytes);
+		int results = in.read(bytes);
+		if(results != 4)
+			System.out.println("Uh oh: " + results);
 		int numSquirrels = ByteHelp.bytesToInt(bytes);
 		System.out.println("reading");
-		in.read(bytes);
+		results = in.read(bytes);
+		if(results != 4)
+			System.out.println("Uh oh: " + results);
 		int numNuts = ByteHelp.bytesToInt(bytes);
 		for(int i = 0; i < numSquirrels; i++)
 		{
-			in.read(bytes);
+			results = in.read(bytes);
 			int id = ByteHelp.bytesToInt(bytes);
-			in.read(bytes);
+			if(results != 4)
+				System.out.println("Uh oh: " + results);
+			results = in.read(bytes);
 			int x = ByteHelp.bytesToInt(bytes);
-			in.read(bytes);
+			if(results != 4)
+				System.out.println("Uh oh: " + results);
+			results = in.read(bytes);
 			int y = ByteHelp.bytesToInt(bytes);
-			in.read(bytes);
+			if(results != 4)
+				System.out.println("Uh oh: " + results);
+			results = in.read(bytes);
 			int squirrelNuts = ByteHelp.bytesToInt(bytes);
-			in.read(bytes);
+			results = in.read(bytes);
 			byte[] nameBytes = new byte[ByteHelp.bytesToInt(bytes)];
 			in.read(nameBytes);
 			String name = new String(nameBytes);
