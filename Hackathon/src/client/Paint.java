@@ -320,7 +320,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	{
 		if(e.getActionCommand().equals("buttonPressed"))
 		{
-			
+
 			if(null == username.getText())
 			{
 				return;

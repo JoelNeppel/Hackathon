@@ -181,6 +181,7 @@ public class Host
 
 		for(Client c : clients)
 		{
+
 			if(c.xChanged())
 			{
 				xChange.add(c.getSquirrel());
