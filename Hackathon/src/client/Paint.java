@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,8 +29,7 @@ import nutty.SquirrelNutComparator;
 import nutty.Tree;
 
 @SuppressWarnings("serial")
-public class Paint extends JPanel implements WindowListener, ActionListener
-{
+public class Paint extends JPanel implements WindowListener, ActionListener, MouseListener {
 
 	private static DoublyLinkedList<Squirrel> squirrels = new DoublyLinkedList<>();
 
@@ -53,17 +53,12 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 	static JButton enterButton;
 
-	public Paint()
-	{
+	public Paint() {
 		super();
-		while(null == client)
-		{
-			try
-			{
+		while (null == client) {
+			try {
 				client = new Socket(Constants.ADDRESS, Constants.PORT);
-			}
-			catch(IOException e)
-			{
+			} catch (IOException e) {
 
 			}
 
@@ -71,6 +66,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		updateData(client);
 		squirrels = new DoublyLinkedList<>();
 		addKeyListener(new Inputs(client));
+
+		addMouseListener(this);
 
 		try
 		{
@@ -88,7 +85,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Nutty.io");
-		Paint panel = new Paint();
+		panel = new Paint();
 		JPanel menu = new JPanel();
 		username = new JTextField(25);
 		enterButton = new JButton("Enter");
@@ -166,14 +163,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		}
 
 		scoreBoard(g);
-		// bottomMenu(g);
 	}
-
-	/*
-	 * private void bottomMenu(Graphics g) { g.setColor(new Color(0, 0, 0, 127));
-	 * g.fillRect(0, 900, 450, 100);; }
-	 */
-
 	private void scoreBoard(Graphics g)
 	{
 		g.setColor(new Color(0, 0, 0, 127));
@@ -345,5 +335,31 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 			}
 		}
+	}
+
+	@Override
+	public void mouseClicked(java.awt.event.MouseEvent e) 
+	{
+		panel.grabFocus();
+	}
+
+	@Override
+	public void mousePressed(java.awt.event.MouseEvent e) 
+	{
+	}
+
+	@Override
+	public void mouseReleased(java.awt.event.MouseEvent e) 
+	{
+	}
+
+	@Override
+	public void mouseEntered(java.awt.event.MouseEvent e)
+	{
+	}
+
+	@Override
+	public void mouseExited(java.awt.event.MouseEvent e)
+	{
 	}
 }
