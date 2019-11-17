@@ -62,7 +62,6 @@ public class DataTransfer
 		if(results != 4)
 			System.out.println("Uh oh: " + results);
 		int numSquirrels = ByteHelp.bytesToInt(bytes);
-		System.out.println("reading");
 		results = in.read(bytes);
 		if(results != 4)
 			System.out.println("Uh oh: " + results);
