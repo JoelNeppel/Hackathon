@@ -55,8 +55,7 @@ public class DataTransfer
 	}
 
 	// Byte format [
-	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts,
-			DoublyLinkedList<Squirrel> squirrels) throws IOException
+	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] bytes = new byte[4];
 		in.read(bytes);
@@ -74,18 +73,23 @@ public class DataTransfer
 			int y = ByteHelp.bytesToInt(bytes);
 			in.read(bytes);
 			int squirrelNuts = ByteHelp.bytesToInt(bytes);
+			in.read(bytes);
+			byte[] nameBytes = new byte[ByteHelp.bytesToInt(bytes)];
+			in.read(nameBytes);
+			String name = new String(nameBytes);
 
 			boolean result = squirrels.contains(new Squirrel(id, 0, 0));
 			Squirrel s;
 			if(!result)
 			{
-				s = new Squirrel(id, x, y);
+				s = new Squirrel(id, x, y, name);
 				squirrels.add(s);
 			}
 			else
 			{
 				s = squirrels.get(new Squirrel(id));
 				s.setLocation(x, y);
+				s.setName(name);
 			}
 			s.setNuts(squirrelNuts);
 
@@ -106,7 +110,13 @@ public class DataTransfer
 	public static byte[] sendFullUpdate(DoublyLinkedList<Nut> nuts, DoublyLinkedList<Client> clients)
 	{
 		int at = 1;
-		byte[] data = new byte[10 + 16 * clients.size() + 8 * nuts.size()];
+		int namesLen = 0;
+		for(Client c : clients)
+		{
+			namesLen += c.getSquirrel().getName().length();
+		}
+
+		byte[] data = new byte[10 + 20 * clients.size() + namesLen + 8 * nuts.size()];
 		data[0] = (byte) TransferType.FULL.getCharacterToSend();
 		ByteHelp.toBytes(clients.size(), at, data);
 		at += 4;
@@ -117,7 +127,7 @@ public class DataTransfer
 		{
 			Squirrel s = c.getSquirrel();
 			byte[] sData = s.getBytes();
-			for(int i = 0; i < 16; i++)
+			for(int i = 0; i < 20 + s.getName().length(); i++)
 			{
 				data[at] = sData[i];
 				at++;

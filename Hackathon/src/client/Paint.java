@@ -3,13 +3,14 @@ package client;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.Socket;
 
 import javax.imageio.ImageIO;
@@ -47,7 +48,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	private Socket client;
 
 	static Paint panel;
-	
+
 	static JTextField username;
 
 	static JButton enterButton;
@@ -97,8 +98,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		menu.setLayout(null);
 		menu.setLocation(0, 0);
 		menu.setSize(450, 60);
-		menu.setBackground(new Color(0,0,0,127));
-		
+		menu.setBackground(new Color(0, 0, 0, 127));
+
 		panel.add(menu);
 
 		username.setLocation(15, 5);
@@ -108,7 +109,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		enterButton.setActionCommand("buttonPressed");
 		enterButton.addActionListener(panel);
 		enterButton.setLocation(280, 10);
-		enterButton.setSize(100,30);
+		enterButton.setSize(100, 30);
 		menu.add(enterButton);
 
 		panel.setLocation(0, 0);
@@ -138,7 +139,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 		Tree.draw(g);
 
-		// squirrels.sort(compare);
+		squirrels.sort(compare);
 
 		for(int i = 0; i < squirrels.size(); ++i)
 		{
@@ -185,7 +186,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 				return;
 			}
 			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-			if (squirrels.get(i).getName() == "") {
+			if(squirrels.get(i).getName() == "")
+			{
 				squirrels.get(i).setName("" + squirrels.get(i).getID());
 			}
 			g.drawString((i + 1) + ": " + squirrels.get(i).getName() + " - " + squirrels.get(i).getNumNuts(), 810,
@@ -316,9 +318,32 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getActionCommand().equals("buttonPressed")) {
-			String name = username.getText();
-		
+		if(e.getActionCommand().equals("buttonPressed"))
+		{
+			if(null == username.getText())
+			{
+				return;
+			}
+
+			byte[] name = username.getText().getBytes();
+
+			try
+			{
+				OutputStream out = client.getOutputStream();
+				byte[] send = new byte[2 + Math.min(name.length, 10)];
+				send[0] = (byte) 'N';
+				send[1] = (byte) Math.min(name.length, 10);
+				for(int i = 2; i < send.length; i++)
+				{
+					send[i] = name[i - 2];
+				}
+
+				out.write(send);
+			}
+			catch(IOException ex)
+			{
+
+			}
 		}
 	}
 }

@@ -100,7 +100,7 @@ public class Client
 	 */
 	public boolean nutsChanged()
 	{
-		return squirrel.getNumNuts() == lastNuts;
+		return squirrel.getNumNuts() != lastNuts;
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class Client
 	 */
 	public boolean xChanged()
 	{
-		return squirrel.getX() == lastX;
+		return squirrel.getX() != lastX;
 	}
 
 	/**
@@ -120,7 +120,7 @@ public class Client
 	 */
 	public boolean yChanged()
 	{
-		return squirrel.getY() == lastY;
+		return squirrel.getY() != lastY;
 	}
 
 	/**
@@ -351,7 +351,13 @@ public class Client
 						}
 						else
 						{
-							if('Q' == got)
+							if('N' == got)
+							{
+								byte[] nameBytes = new byte[in.read()];
+								in.read(nameBytes);
+								squirrel.setName(new String(nameBytes));
+							}
+							else if('Q' == got)
 							{
 								endPlayer();
 							}

@@ -126,12 +126,18 @@ public class Squirrel
 
 	public byte[] getBytes()
 	{
-		byte[] data = new byte[16];
+		byte[] data = new byte[20 + playerName.length()];
 		ByteHelp.toBytes(playerID, 0, data);
 		ByteHelp.toBytes(loc.x, 4, data);
 		ByteHelp.toBytes(loc.y, 8, data);
 		ByteHelp.toBytes(numNuts, 12, data);
-
+		ByteHelp.toBytes(playerName.length(), 16, data);
+		int at = 20;
+		for(byte b : playerName.getBytes())
+		{
+			data[at] = b;
+			at++;
+		}
 		return data;
 	}
 
