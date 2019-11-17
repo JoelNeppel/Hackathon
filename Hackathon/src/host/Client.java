@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.SocketException;
-import java.util.Arrays;
 
 import nutty.DoublyLinkedList;
 import nutty.Movement;
@@ -68,7 +67,7 @@ public class Client
 	 */
 	public void write(byte[] data)
 	{
-		System.out.println("Writing: " + Arrays.toString(data));
+		// System.out.println("Writing: " + Arrays.toString(data));
 		if(soc.isClosed())
 		{
 			endPlayer();
