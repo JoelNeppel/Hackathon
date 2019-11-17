@@ -131,7 +131,7 @@ public class Host
 				// Send bytes to each client
 				for(Client c : clients)
 				{
-					System.out.println("Writing to clients");
+					System.out.println("Writing to clients: " + data.length);
 					c.write(data);
 				}
 
@@ -301,7 +301,7 @@ public class Host
 		byte[] send = DataTransfer.sendPlayerRemoval(c.getSquirrel());
 		for(Client client : clients)
 		{
-			client.write(send);
+			// client.write(send);
 		}
 	}
 }

@@ -60,7 +60,7 @@ public class DataTransfer
 		byte[] bytes = new byte[4];
 		in.read(bytes);
 		int numSquirrels = ByteHelp.bytesToInt(bytes);
-		System.out.println("Squirrels: " + numSquirrels);
+		System.out.println("reading");
 		in.read(bytes);
 		int numNuts = ByteHelp.bytesToInt(bytes);
 		for(int i = 0; i < numSquirrels; i++)
