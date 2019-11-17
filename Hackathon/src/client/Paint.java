@@ -214,13 +214,26 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			{
 				try
 				{
-					char got = (char) in.read();
-					if(got != 'F')
-						System.out.println("Bad juju " + got);
-					DataTransfer.receiveFullUpdate(in, nuts, squirrels);
-					got = (char) in.read();
-					if(got != 'D')
-						System.out.println("Bad juju " + got);
+					char got = ' ';
+					while('D' != got)
+					{
+						int g = in.read();
+						got = (char) g;
+						if(got != 'F')
+						{
+							System.out.println("Bad juju " + g + got);
+							clearInput(in);
+						}
+						else
+						{
+							DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+							g = in.read();
+							got = (char) g;
+							if(got != 'D')
+								System.out.println("Bad juju " + g + got);
+						}
+					}
+
 					// int got = in.read();
 					// System.out.println("Got:: " + got);
 					// System.out.println("Got: " + (char) got);
@@ -270,6 +283,16 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			}
 
 		}).start();
+	}
+
+	private void clearInput(InputStream in) throws IOException
+	{
+		System.out.println("\n\nCleared!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
+		int got = in.read();
+		while('D' != got)
+		{
+			got = in.read();
+		}
 	}
 
 	@Override
