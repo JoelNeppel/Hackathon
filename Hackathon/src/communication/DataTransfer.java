@@ -58,31 +58,21 @@ public class DataTransfer
 	public static void receiveFullUpdate(InputStream in, DoublyLinkedList<Nut> nuts, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] bytes = new byte[4];
-		int results = in.read(bytes);
-		if(results != 4)
-			System.out.println("Uh oh: " + results);
+		safeRead(in, bytes);
 		int numSquirrels = ByteHelp.bytesToInt(bytes);
-		results = in.read(bytes);
-		if(results != 4)
-			System.out.println("Uh oh: " + results);
+		safeRead(in, bytes);
 		int numNuts = ByteHelp.bytesToInt(bytes);
 		for(int i = 0; i < numSquirrels; i++)
 		{
-			results = in.read(bytes);
+			safeRead(in, bytes);
 			int id = ByteHelp.bytesToInt(bytes);
-			if(results != 4)
-				System.out.println("Uh oh: " + results);
-			results = in.read(bytes);
+			safeRead(in, bytes);
 			int x = ByteHelp.bytesToInt(bytes);
-			if(results != 4)
-				System.out.println("Uh oh: " + results);
-			results = in.read(bytes);
+			safeRead(in, bytes);
 			int y = ByteHelp.bytesToInt(bytes);
-			if(results != 4)
-				System.out.println("Uh oh: " + results);
-			results = in.read(bytes);
+			safeRead(in, bytes);
 			int squirrelNuts = ByteHelp.bytesToInt(bytes);
-			results = in.read(bytes);
+			safeRead(in, bytes);
 			byte[] nameBytes = new byte[ByteHelp.bytesToInt(bytes)];
 			in.read(nameBytes);
 			String name = new String(nameBytes);
@@ -107,9 +97,9 @@ public class DataTransfer
 		nuts.clear();
 		for(int i = 0; i < numNuts; i++)
 		{
-			in.read(bytes);
+			safeRead(in, bytes);
 			int x = ByteHelp.bytesToInt(bytes);
-			in.read(bytes);
+			safeRead(in, bytes);
 			int y = ByteHelp.bytesToInt(bytes);
 
 			nuts.add(new Nut(x, y));
@@ -192,11 +182,11 @@ public class DataTransfer
 		byte[] data = new byte[2];
 
 		// X location
-		in.read(data);
+		safeRead(in, data);
 		int x = ByteHelp.bytesToInt(data);
 
 		// Y location
-		in.read(data);
+		safeRead(in, data);
 		int y = ByteHelp.bytesToInt(data);
 
 		a.nutAction(new Nut(x, y));
@@ -224,20 +214,20 @@ public class DataTransfer
 		byte[] data = new byte[2];
 
 		// Player ID
-		in.read(data);
+		safeRead(in, data);
 		int id = ByteHelp.bytesToInt(data);
 
 		// X location
-		in.read(data);
+		safeRead(in, data);
 		int x = ByteHelp.bytesToInt(data);
 
 		// Y location
-		in.read(data);
+		safeRead(in, data);
 		int y = ByteHelp.bytesToInt(data);
 
 		// Username
 		data = new byte[in.read()];
-		in.read(data);
+		safeRead(in, data);
 		String username = new String(data);
 
 		Squirrel s = new Squirrel(id, x, y, username);
@@ -287,7 +277,7 @@ public class DataTransfer
 	public static void receivePlayerRemoval(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
 		byte[] data = new byte[2];
-		in.read(data);
+		safeRead(in, data);
 
 		int id = ByteHelp.bytesToInt(data);
 
@@ -310,17 +300,19 @@ public class DataTransfer
 	// repeats for each remaining player]
 	public static void performXUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
-		int numElements = in.read();
+		byte[] num = new byte[1];
+		safeRead(in, num);
+		int numElements = num[0];
 
 		byte[] data = new byte[2];
 		for(int i = 0; i < numElements; i++)
 		{
 			// Player ID
-			in.read(data);
+			safeRead(in, data);
 			int id = ByteHelp.bytesToInt(data);
 
 			// New player X
-			in.read(data);
+			safeRead(in, data);
 			int newX = ByteHelp.bytesToInt(data);
 
 			squirrels.get(new Squirrel(id)).setX(newX);
@@ -359,17 +351,19 @@ public class DataTransfer
 	// repeats for each remaining player]
 	public static void performYUpdates(InputStream in, DoublyLinkedList<Squirrel> squirrels) throws IOException
 	{
-		int numElements = in.read();
+		byte[] num = new byte[1];
+		safeRead(in, num);
+		int numElements = num[0];
 
 		byte[] data = new byte[2];
 		for(int i = 0; i < numElements; i++)
 		{
 			// Player ID
-			in.read(data);
+			safeRead(in, data);
 			int id = ByteHelp.bytesToInt(data);
 
 			// New player Y
-			in.read(data);
+			safeRead(in, data);
 			int newY = ByteHelp.bytesToInt(data);
 
 			squirrels.get(new Squirrel(id, 0, 0)).setY(newY);
@@ -410,11 +404,11 @@ public class DataTransfer
 		byte[] data = new byte[2];
 
 		// ID
-		in.read(data);
+		safeRead(in, data);
 		int id = ByteHelp.bytesToInt(data);
 
 		// Num nuts
-		in.read(data);
+		safeRead(in, data);
 		int numNuts = ByteHelp.bytesToInt(data);
 
 		squirrels.get(new Squirrel(id)).setNuts(numNuts);
@@ -444,7 +438,7 @@ public class DataTransfer
 	{
 		byte[] data = new byte[2];
 
-		in.read(data);
+		safeRead(in, data);
 		int id = ByteHelp.bytesToInt(data);
 
 		squirrels.get(new Squirrel(id)).addNut();
@@ -460,5 +454,15 @@ public class DataTransfer
 		data[2] = id[3];
 
 		return data;
+	}
+
+	private static void safeRead(InputStream in, byte[] bytes) throws IOException
+	{
+		int read = 0;
+
+		while(read < bytes.length)
+		{
+			read += in.read(bytes, read, bytes.length - read);
+		}
 	}
 }

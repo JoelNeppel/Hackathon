@@ -119,6 +119,7 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		else
 		{
 			tail = n2;
+			n2.next = null;
 		}
 
 		n1.next = n2;
@@ -146,8 +147,8 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		else if(n.next == null)
 		{
 			// n is tail case
-			n.previous.next = null;
 			tail = n.previous;
+			tail.next = null;
 		}
 		else
 		{
@@ -290,19 +291,22 @@ public class DoublyLinkedList<E> implements Iterable<E>
 		{
 			return;
 		}
-		if(n1 == head)
+
+		Node prev = n1.previous;
+		unlink(n1);
+		link(n2, n1);
+		unlink(n2);
+		if(null != prev)
 		{
+			link(prev, n2);
+		}
+		else
+		{
+			head.previous = n2;
+			n2.next = head;
+			n2.previous = null;
 			head = n2;
 		}
-		if(n2 == tail)
-		{
-			tail = n1;
-		}
-
-		n2.previous = n1.previous;
-		n1.next = n2.next;
-		n1.previous = n2;
-		n2.next = n1;
 	}
 
 	@Override

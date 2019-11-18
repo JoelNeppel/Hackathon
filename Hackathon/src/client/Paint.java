@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -141,25 +142,30 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 		squirrels.sort(compare);
 
-		for(int i = 0; i < squirrels.size(); ++i)
+		Iterator<Squirrel> iter = squirrels.iterator();
+		int i = 0;
+		while(iter.hasNext())
 		{
+			Squirrel s = iter.next();
 			if(0 == i)
 			{
-				g.drawImage(FirstPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
+				g.drawImage(FirstPlace, s.getX(), s.getY(), this);
 			}
 			else if(1 == i)
 			{
-				g.drawImage(SecondPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
+				g.drawImage(SecondPlace, s.getX(), s.getY(), this);
 			}
 			else if(2 == i)
 			{
-				g.drawImage(ThirdPlace, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
+				g.drawImage(ThirdPlace, s.getX(), s.getY(), this);
 			}
 			else
 			{
-				g.drawImage(BasicImage, squirrels.get(i).getX(), squirrels.get(i).getY(), this);
+				g.drawImage(BasicImage, s.getX(), s.getY(), this);
 			}
+			i++;
 		}
+
 		for(Nut n : nuts)
 		{
 			n.drawNut(g);
@@ -223,10 +229,14 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 						{
 							System.out.println("Bad juju " + g + got);
 							clearInput(in);
+
 						}
 						else
 						{
-							DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+							synchronized(this)
+							{
+								DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+							}
 							g = in.read();
 							got = (char) g;
 							if(got != 'D')
@@ -235,10 +245,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 					}
 
 					// int got = in.read();
-					// System.out.println("Got:: " + got);
-					// System.out.println("Got: " + (char) got);
 					// TransferType com = TransferType.charToTransfer((char) got);
-					// System.out.println(com);
 					// while(null != com && TransferType.DONE != com)
 					// {
 					// switch(com)
@@ -271,6 +278,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 					// DataTransfer.performNutSet(in, squirrels);
 					// break;
 					// default:
+					// clearInput(in);
 					// break;
 					// }
 					// }
