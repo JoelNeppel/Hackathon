@@ -24,7 +24,7 @@ public class SquirrelNutComparator implements Comparator<Squirrel>
 		}
 		else
 		{
-			return s1.getID() - s2.getID();
+			return 0;
 		}
 	}
 }

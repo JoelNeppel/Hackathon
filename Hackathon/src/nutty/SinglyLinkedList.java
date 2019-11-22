@@ -155,6 +155,9 @@ public class SinglyLinkedList<E> implements Iterable<E>
 		return false;
 	}
 
+	/**
+	 * Removes all elements and sets size to zero.
+	 */
 	public void clear()
 	{
 		head = null;

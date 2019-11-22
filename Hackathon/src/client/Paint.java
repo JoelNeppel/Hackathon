@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.util.Iterator;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -65,10 +64,9 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			}
 			catch(IOException e)
 			{
-
 			}
-
 		}
+
 		updateData(client);
 		squirrels = new DoublyLinkedList<>();
 		addKeyListener(new Inputs(client));
@@ -131,7 +129,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	}
 
 	@Override
-	public synchronized void paint(Graphics g)
+	public void paint(Graphics g)
 	{
 		super.paint(g);
 
@@ -142,11 +140,9 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 		squirrels.sort(compare);
 
-		Iterator<Squirrel> iter = squirrels.iterator();
 		int i = 0;
-		while(iter.hasNext())
+		for(Squirrel s : squirrels)
 		{
-			Squirrel s = iter.next();
 			if(0 == i)
 			{
 				g.drawImage(FirstPlace, s.getX(), s.getY(), this);
@@ -179,24 +175,24 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		g.setColor(new Color(0, 0, 0, 127));
 		g.fillRect(800, 0, 200, 220);
 		g.setColor(Color.WHITE);
-		for(int i = 0; i < squirrels.size(); ++i)
+		int i = 0;
+		for(Squirrel s : squirrels)
 		{
 			if(i > 9)
 			{
 				return;
 			}
 			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
-			if(squirrels.get(i).getName() == "")
+			if(s.getName().isEmpty())
 			{
-				g.drawString((i + 1) + ": " + squirrels.get(i).getID() + " - " + squirrels.get(i).getNumNuts(), 810, 25 + (20 * i));
+				g.drawString((i + 1) + ": " + s.getID() + " - " + s.getNumNuts(), 810, 25 + (20 * i));
 			}
 			else
 			{
-				g.drawString((i + 1) + ": " + squirrels.get(i).getName() + " - " + squirrels.get(i).getNumNuts(), 810, 25 + (20 * i));
+				g.drawString((i + 1) + ": " + s.getName() + " - " + s.getNumNuts(), 810, 25 + (20 * i));
 			}
-
+			i++;
 		}
-
 	}
 
 	private void updateData(Socket client)
@@ -216,6 +212,19 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 				}
 			}
 
+			try
+			{
+				while(in.read() != 'F')
+				{
+					clearInput(in);
+				}
+				DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+				in.read();
+			}
+			catch(IOException e)
+			{
+			}
+
 			while(!Thread.interrupted())
 			{
 				try
@@ -233,10 +242,8 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 						}
 						else
 						{
-							synchronized(this)
-							{
-								DataTransfer.receiveFullUpdate(in, nuts, squirrels);
-							}
+							DataTransfer.receiveFullUpdate(in, nuts, squirrels);
+
 							g = in.read();
 							got = (char) g;
 							if(got != 'D')
@@ -291,16 +298,17 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			}
 
 		}).start();
+
 	}
 
 	private void clearInput(InputStream in) throws IOException
 	{
-		System.out.println("\n\nCleared!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n\n");
 		int got = in.read();
 		while('D' != got)
 		{
 			got = in.read();
 		}
+		// TODO request full update for any missed data
 	}
 
 	@Override
@@ -314,36 +322,6 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		{
 		}
 		System.exit(0);
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e)
-	{
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e)
-	{
 	}
 
 	@Override
@@ -379,5 +357,35 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		}
 
 		panel.grabFocus();
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e)
+	{
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e)
+	{
 	}
 }
