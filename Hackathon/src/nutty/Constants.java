@@ -15,4 +15,12 @@ public class Constants
 	public static final String SQUIRREL_FIRST_PATH = "squirrelFirst.png";
 
 	public static final int NUT_GENERATION_LIMIT = 30;
+
+	public static final int MAX_NUM_PLAYERS = 255;
+
+	public static final int PLAYER_NAME_LIMIT = 10;
+
+	public static final int WINDOW_WIDTH = 1000;
+
+	public static final int WINDOW_HEIGHT = 1000;
 }

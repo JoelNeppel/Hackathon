@@ -152,7 +152,7 @@ public class Client
 	 */
 	public void doMovement(DoublyLinkedList<Client> clients, DoublyLinkedList<Nut> nuts)
 	{
-		switch(squirrel.getDirection())
+		switch(squirrel.getMovement())
 		{
 			case UP:
 				squirrel.move(0, -2);
@@ -195,7 +195,7 @@ public class Client
 					{
 						moveDist = 50;
 					}
-					switch(squirrel.getDirection())
+					switch(squirrel.getMovement())
 					{
 						case UP:
 							other.move(0, -moveDist);
@@ -220,7 +220,7 @@ public class Client
 					{
 						moveDist = 50;
 					}
-					switch(other.getDirection())
+					switch(other.getMovement())
 					{
 						case UP:
 							squirrel.move(0, -moveDist);
@@ -245,7 +245,7 @@ public class Client
 					{
 						moveDist = 50;
 					}
-					switch(squirrel.getDirection())
+					switch(squirrel.getMovement())
 					{
 						case UP:
 							other.move(0, -moveDist);

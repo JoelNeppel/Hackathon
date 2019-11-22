@@ -274,7 +274,6 @@ public class Host
 					synchronized(Host.class)
 					{
 						nuts.add(new Nut(x, y));
-						System.out.println("Added new nut");
 					}
 				}
 

@@ -61,17 +61,12 @@ public class Squirrel
 
 	public int getX()
 	{
-		return (int) loc.getX();
+		return loc.x;
 	}
 
 	public int getY()
 	{
-		return (int) loc.getY();
-	}
-
-	public Movement getDirection()
-	{
-		return dir;
+		return loc.y;
 	}
 
 	public void addNut()
@@ -156,6 +151,6 @@ public class Squirrel
 	@Override
 	public String toString()
 	{
-		return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ") with: " + numNuts + " nuts.";
+		return "Squirrel: " + playerID + " at (" + loc.x + ", " + loc.y + ") with: " + numNuts + " nuts";
 	}
 }
