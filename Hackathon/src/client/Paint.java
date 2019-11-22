@@ -194,7 +194,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			i++;
 		}
 	}
-
+	
 	private void updateData(Socket client)
 	{
 		new Thread(()->
