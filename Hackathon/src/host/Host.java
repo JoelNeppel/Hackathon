@@ -26,8 +26,14 @@ public class Host
 	 */
 	private static DoublyLinkedList<Nut> nuts; // haha nuts
 
+	/**
+	 * The list of nuts who's removal needs to be sent to the clients
+	 */
 	private static SinglyLinkedList<Nut> removed;
 
+	/**
+	 * The list of nuts who's addition needs to be sent to the clients
+	 */
 	private static SinglyLinkedList<Nut> added;
 
 	/**
