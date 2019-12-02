@@ -12,7 +12,9 @@ public enum Command
 	ADD_SQUIRREL('A'),
 	MOVE_SQUIRREL('M'),
 	ADD_NUT('N'),
-	REMOVE_NUT('R');
+	REMOVE_NUT('R'),
+	DONE('D'),
+	RESEND('H');
 
 	/**
 	 * The char to send as command

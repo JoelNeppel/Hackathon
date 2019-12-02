@@ -248,7 +248,7 @@ public class Host
 		Squirrel squirrel = new Squirrel(playerNum, new Random().nextInt(900), 850);
 
 		byte[] send = DataTransfer.sendAddPlayer(squirrel);
-		for(Client c : clients)
+		// for(Client c : clients)
 		{
 			// c.write(send);
 		}
@@ -304,8 +304,8 @@ public class Host
 	{
 		clients.remove(c);
 
-		byte[] send = DataTransfer.sendPlayerRemoval(c.getSquirrel());
-		for(Client client : clients)
+		// byte[] send = DataTransfer.sendPlayerRemoval(c.getSquirrel());
+		// for(Client client : clients)
 		{
 			// client.write(send);
 		}

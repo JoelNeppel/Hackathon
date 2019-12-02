@@ -19,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import communication.Command;
 import communication.DataTransfer;
 import nutty.Constants;
 import nutty.DoublyLinkedList;
@@ -48,7 +49,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	private Socket client;
 
 	private static JTextField username;
-	
+
 	private static Paint panel;
 
 	public Paint()
@@ -184,7 +185,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			g.drawString((i + 1) + ": " + s.getName() + " - " + s.getNumNuts(), 810, 25 + (20 * i));
 		}
 	}
-	
+
 	private void updateData(Socket client)
 	{
 		new Thread(()->
@@ -206,7 +207,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			{
 				while(in.read() != 'F')
 				{
-					clearInput(in);
+					correctData(client);
 				}
 				DataTransfer.receiveFullUpdate(in, nuts, squirrels);
 				in.read();
@@ -227,7 +228,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 						if(got != 'F')
 						{
 							System.out.println("Bad juju " + g + got);
-							clearInput(in);
+							correctData(client);
 
 						}
 						else
@@ -291,14 +292,33 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 	}
 
-	private void clearInput(InputStream in) throws IOException
+	/**
+	 * Corrects and errors received during data transfer. Discards data until full
+	 * update is received.
+	 * @param s
+	 *     The socket to use
+	 * @throws IOException
+	 */
+	private void correctData(Socket s) throws IOException
 	{
+		InputStream in = s.getInputStream();
+		// Request full update for any missed information
+		s.getOutputStream().write(Command.RESEND.getChar());
+
 		int got = in.read();
-		while('D' != got)
+		do
 		{
+			// Read until back to a new command
+			while(Command.DONE.getChar() != got)
+			{
+				got = in.read();
+			}
+
 			got = in.read();
 		}
-		// TODO request full update for any missed data
+		while(Command.FULL_UPDATE.getChar() != got); // Ignore other data until full update is received
+
+		DataTransfer.receiveFullUpdate(in, nuts, squirrels);
 	}
 
 	@Override
