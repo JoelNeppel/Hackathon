@@ -47,6 +47,10 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 	private Socket client;
 
+	private static JTextField username;
+	
+	private static Paint panel;
+
 	public Paint()
 	{
 		super();
@@ -81,9 +85,9 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	public static void main(String[] args)
 	{
 		JFrame frame = new JFrame("Nutty.io");
-		Paint panel = new Paint();
+		panel = new Paint();
 		JPanel menu = new JPanel();
-		JTextField username = new JTextField(25);
+		username = new JTextField(25);
 		JButton enterButton = new JButton("Enter");
 
 		panel.setLayout(null);
