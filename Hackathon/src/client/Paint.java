@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -85,7 +86,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 	public static void main(String[] args)
 	{
-		JFrame frame = new JFrame("Nutty.io");
+		JFrame frame = new JFrame(selectName());
 		panel = new Paint();
 		JPanel menu = new JPanel();
 		username = new JTextField(25);
@@ -184,6 +185,21 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			g.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 20));
 			g.drawString((i + 1) + ": " + s.getName() + " - " + s.getNumNuts(), 810, 25 + (20 * i));
 			i++;
+		}
+	}
+
+	private static String selectName()
+	{
+		Random rand = new Random();
+		String[] names = {"Nutty.io", "Nuts"};
+
+		if (rand.nextInt(100) == 99)
+		{
+			return "Fuck";
+		}
+		else
+		{
+			return names[rand.nextInt(2)];
 		}
 	}
 
