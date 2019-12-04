@@ -4,7 +4,7 @@ public class Constants
 {
 	public static final int PORT = 42069; // nice
 
-	public static final String ADDRESS = "10.37.20.12";
+	public static final String ADDRESS = "10.37.29.214";
 
 	public static final String SQUIRREL_BASIC_PATH = "squirrelBasic.png";
 
