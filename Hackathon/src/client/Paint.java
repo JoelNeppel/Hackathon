@@ -191,15 +191,15 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	private static String selectName()
 	{
 		Random rand = new Random();
-		String[] names = {"Nutty.io", "Nuts"};
+		String[] names = {"Nutty.io", "Nuts"}; //add more names if needed
 
 		if (rand.nextInt(100) == 99)
 		{
-			return "Fuck";
+			return "Fuck"; //maybe change
 		}
 		else
 		{
-			return names[rand.nextInt(2)];
+			return names[rand.nextInt(names.length)];
 		}
 	}
 
