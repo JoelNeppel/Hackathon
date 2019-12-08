@@ -192,11 +192,11 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 	{
 		Random rand = new Random();
 		int randAmount = 100;
-		String[] names = {"Nutty.io", "Nuts"}; //add more names if needed
+		String[] names = {"Nutty.io", "Nuts"}; // add more names if needed
 
-		if (rand.nextInt(randAmount) == (randAmount - 1))
+		if(rand.nextInt(randAmount) == (randAmount - 1))
 		{
-			return "Fuck"; //maybe change
+			return "Fuck"; // maybe change
 		}
 		else
 		{
@@ -368,9 +368,9 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 			try
 			{
 				OutputStream out = client.getOutputStream();
-				byte[] send = new byte[2 + Math.min(name.length, 10)];
+				byte[] send = new byte[2 + Math.min(name.length, Constants.PLAYER_NAME_LIMIT)];
 				send[0] = (byte) 'N';
-				send[1] = (byte) Math.min(name.length, 10);
+				send[1] = (byte) Math.min(name.length, Constants.PLAYER_NAME_LIMIT);
 				for(int i = 2; i < send.length; i++)
 				{
 					send[i] = name[i - 2];

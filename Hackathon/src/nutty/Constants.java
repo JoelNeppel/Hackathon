@@ -18,7 +18,7 @@ public class Constants
 
 	public static final int MAX_NUM_PLAYERS = 255;
 
-	public static final int PLAYER_NAME_LIMIT = 10;
+	public static final int PLAYER_NAME_LIMIT = 12;
 
 	public static final int WINDOW_WIDTH = 1000;
 
