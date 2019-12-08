@@ -137,7 +137,6 @@ public class Host
 				// Send bytes to each client
 				for(Client c : clients)
 				{
-					System.out.println("Writing to clients: " + data.length);
 					c.write(data);
 				}
 
