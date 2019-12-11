@@ -7,7 +7,7 @@ import java.awt.Graphics;
  * Stores the x and y coordinate for the nut. Also stores the colors for the nut
  * graphics.
  * 
- * @author JoelNeppel, zgrewell
+ * @author JoelNeppel, ZackGrewell
  *
  */
 public class Nut

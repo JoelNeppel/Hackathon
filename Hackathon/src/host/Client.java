@@ -14,7 +14,7 @@ import nutty.Squirrel;
 /**
  * Class to store a socket and squirrel for each client.
  * 
- * @author JoelNeppel, zgrewell
+ * @author JoelNeppel, ZackGrewell
  *
  */
 public class Client
