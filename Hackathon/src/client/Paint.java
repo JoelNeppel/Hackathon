@@ -91,6 +91,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		JPanel menu = new JPanel();
 		username = new JTextField(25);
 		JButton enterButton = new JButton("Enter");
+		
 
 		panel.setLayout(null);
 
@@ -120,12 +121,13 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setSize(1000, 1000);
+		Tree.setLoc(frame.getWidth(), frame.getHeight());
 
 		panel.requestFocus();
 		panel.revalidate();
 		panel.repaint();
-		Tree.setLoc(frame.getWidth(), frame.getHeight());
-
+		
+		
 	}
 
 	@Override
@@ -245,7 +247,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 						got = (char) g;
 						if(got != 'F')
 						{
-							System.out.println("Bad juju " + g + got);
+							//System.out.println("Bad juju " + g + got);
 							correctData(client);
 
 						}
@@ -255,8 +257,7 @@ public class Paint extends JPanel implements WindowListener, ActionListener
 
 							g = in.read();
 							got = (char) g;
-							if(got != 'D')
-								System.out.println("Bad juju " + g + got);
+							//if(got != 'D') System.out.println("Bad juju " + g + got);
 						}
 					}
 
